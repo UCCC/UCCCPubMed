@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSet" targetNamespace="http://tempuri.org/DataSet.xsd" xmlns:mstns="http://tempuri.org/DataSet.xsd" xmlns="http://tempuri.org/DataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" GeneratorFunctionsComponentClassName="QueriesTableAdapter" GeneratorFunctionsComponentInterfaceName="IQueriesTableAdapter" GeneratorTypeConverterClassName="Converter" Modifier="AutoLayout, AnsiClass, Class, Public" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="OrganMapDB" ConnectionStringObject="" IsAppSettingsProperty="True" Modifier="Assembly" Name="OrganMapDB (Web.config)" ParameterPrefix="@" PropertyReference="&lt;SOAP-ENV:Envelope xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:SOAP-ENC=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot; xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:clr=&quot;http://schemas.microsoft.com/soap/encoding/clr/1.0&quot; SOAP-ENV:encodingStyle=&quot;http://schemas.xmlsoap.org/soap/encoding/&quot;&gt;&#xD;&#xA;&lt;SOAP-ENV:Body&gt;&#xD;&#xA;&lt;a1:CodePropertyReferenceExpression id=&quot;ref-1&quot; xmlns:a1=&quot;http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D2.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089&quot;&gt;&#xD;&#xA;&lt;targetObject href=&quot;#ref-3&quot;/&gt;&#xD;&#xA;&lt;propertyName id=&quot;ref-4&quot;&gt;ConnectionString&lt;/propertyName&gt;&#xD;&#xA;&lt;parameters href=&quot;#ref-5&quot;/&gt;&#xD;&#xA;&lt;CodeObject_x002B_userData xsi:null=&quot;1&quot;/&gt;&#xD;&#xA;&lt;/a1:CodePropertyReferenceExpression&gt;&#xD;&#xA;&lt;a1:CodeIndexerExpression id=&quot;ref-3&quot; xmlns:a1=&quot;http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D2.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089&quot;&gt;&#xD;&#xA;&lt;targetObject href=&quot;#ref-6&quot;/&gt;&#xD;&#xA;&lt;indices href=&quot;#ref-7&quot;/&gt;&#xD;&#xA;&lt;CodeObject_x002B_userData xsi:null=&quot;1&quot;/&gt;&#xD;&#xA;&lt;/a1:CodeIndexerExpression&gt;&#xD;&#xA;&lt;a1:CodeExpressionCollection id=&quot;ref-5&quot; xmlns:a1=&quot;http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D2.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089&quot;&gt;&#xD;&#xA;&lt;CollectionBase_x002B_list href=&quot;#ref-8&quot;/&gt;&#xD;&#xA;&lt;/a1:CodeExpressionCollection&gt;&#xD;&#xA;&lt;a1:CodePropertyReferenceExpression id=&quot;ref-6&quot; xmlns:a1=&quot;http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D2.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089&quot;&gt;&#xD;&#xA;&lt;targetObject href=&quot;#ref-9&quot;/&gt;&#xD;&#xA;&lt;propertyName id=&quot;ref-10&quot;&gt;ConnectionStrings&lt;/propertyName&gt;&#xD;&#xA;&lt;parameters href=&quot;#ref-11&quot;/&gt;&#xD;&#xA;&lt;CodeObject_x002B_userData xsi:null=&quot;1&quot;/&gt;&#xD;&#xA;&lt;/a1:CodePropertyReferenceExpression&gt;&#xD;&#xA;&lt;a1:CodeExpressionCollection id=&quot;ref-7&quot; xmlns:a1=&quot;http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D2.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089&quot;&gt;&#xD;&#xA;&lt;CollectionBase_x002B_list href=&quot;#ref-12&quot;/&gt;&#xD;&#xA;&lt;/a1:CodeExpressionCollection&gt;&#xD;&#xA;&lt;a2:ArrayList id=&quot;ref-8&quot; xmlns:a2=&quot;http://schemas.microsoft.com/clr/ns/System.Collections&quot;&gt;&#xD;&#xA;&lt;_items href=&quot;#ref-13&quot;/&gt;&#xD;&#xA;&lt;_size&gt;0&lt;/_size&gt;&#xD;&#xA;&lt;_version&gt;0&lt;/_version&gt;&#xD;&#xA;&lt;/a2:ArrayList&gt;&#xD;&#xA;&lt;a1:CodeTypeReferenceExpression id=&quot;ref-9&quot; xmlns:a1=&quot;http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D2.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089&quot;&gt;&#xD;&#xA;&lt;type href=&quot;#ref-14&quot;/&gt;&#xD;&#xA;&lt;CodeObject_x002B_userData xsi:null=&quot;1&quot;/&gt;&#xD;&#xA;&lt;/a1:CodeTypeReferenceExpression&gt;&#xD;&#xA;&lt;a1:CodeExpressionCollection id=&quot;ref-11&quot; xmlns:a1=&quot;http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D2.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089&quot;&gt;&#xD;&#xA;&lt;CollectionBase_x002B_list href=&quot;#ref-15&quot;/&gt;&#xD;&#xA;&lt;/a1:CodeExpressionCollection&gt;&#xD;&#xA;&lt;a2:ArrayList id=&quot;ref-12&quot; xmlns:a2=&quot;http://schemas.microsoft.com/clr/ns/System.Collections&quot;&gt;&#xD;&#xA;&lt;_items href=&quot;#ref-16&quot;/&gt;&#xD;&#xA;&lt;_size&gt;1&lt;/_size&gt;&#xD;&#xA;&lt;_version&gt;1&lt;/_version&gt;&#xD;&#xA;&lt;/a2:ArrayList&gt;&#xD;&#xA;&lt;SOAP-ENC:Array id=&quot;ref-13&quot; SOAP-ENC:arrayType=&quot;xsd:anyType[0]&quot;&gt;&#xD;&#xA;&lt;/SOAP-ENC:Array&gt;&#xD;&#xA;&lt;a1:CodeTypeReference id=&quot;ref-14&quot; xmlns:a1=&quot;http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D2.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089&quot;&gt;&#xD;&#xA;&lt;baseType id=&quot;ref-17&quot;&gt;System.Configuration.ConfigurationManager&lt;/baseType&gt;&#xD;&#xA;&lt;isInterface&gt;false&lt;/isInterface&gt;&#xD;&#xA;&lt;arrayRank&gt;0&lt;/arrayRank&gt;&#xD;&#xA;&lt;arrayElementType xsi:null=&quot;1&quot;/&gt;&#xD;&#xA;&lt;typeArguments xsi:null=&quot;1&quot;/&gt;&#xD;&#xA;&lt;referenceOptions&gt;0&lt;/referenceOptions&gt;&#xD;&#xA;&lt;needsFixup&gt;true&lt;/needsFixup&gt;&#xD;&#xA;&lt;CodeObject_x002B_userData xsi:null=&quot;1&quot;/&gt;&#xD;&#xA;&lt;/a1:CodeTypeReference&gt;&#xD;&#xA;&lt;a2:ArrayList id=&quot;ref-15&quot; xmlns:a2=&quot;http://schemas.microsoft.com/clr/ns/System.Collections&quot;&gt;&#xD;&#xA;&lt;_items href=&quot;#ref-13&quot;/&gt;&#xD;&#xA;&lt;_size&gt;0&lt;/_size&gt;&#xD;&#xA;&lt;_version&gt;0&lt;/_version&gt;&#xD;&#xA;&lt;/a2:ArrayList&gt;&#xD;&#xA;&lt;SOAP-ENC:Array id=&quot;ref-16&quot; SOAP-ENC:arrayType=&quot;xsd:anyType[4]&quot;&gt;&#xD;&#xA;&lt;item href=&quot;#ref-18&quot;/&gt;&#xD;&#xA;&lt;/SOAP-ENC:Array&gt;&#xD;&#xA;&lt;a1:CodePrimitiveExpression id=&quot;ref-18&quot; xmlns:a1=&quot;http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D2.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089&quot;&gt;&#xD;&#xA;&lt;value id=&quot;ref-19&quot; xsi:type=&quot;SOAP-ENC:string&quot;&gt;OrganMapDB&lt;/value&gt;&#xD;&#xA;&lt;CodeObject_x002B_userData xsi:null=&quot;1&quot;/&gt;&#xD;&#xA;&lt;/a1:CodePrimitiveExpression&gt;&#xD;&#xA;&lt;/SOAP-ENV:Body&gt;&#xD;&#xA;&lt;/SOAP-ENV:Envelope&gt;&#xD;&#xA;" Provider="System.Data.SqlClient">
+          </Connection>
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorName="MemberInfoTableAdapter" GeneratorDataComponentClassName="MemberInfoTableAdapter" GeneratorDataComponentInterfaceName="IMemberInfoTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" Name="MemberInfo" UserDataComponentName="MemberInfoTableAdapter" WebServiceAttribute="False">
+            <MainSource>
+              <DbSource ConnectionRef="OrganMapDB (Web.config)" DbObjectName="dbo.MemberInfo" DbObjectType="Table" EnableWebMethods="False" GenerateMethods="Get" GeneratePagingMethods="False" GenerateShortCommands="True" GeneratorGetMethodName="GetMemberList" GetMethodName="GetMemberList" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="False" UserGetMethodName="GetMemberList" UserSourceName="GetMemberList">
+                <DeleteCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>DELETE FROM [MemberInfo] WHERE (([memberid] = @Original_memberid))</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="False" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@Original_memberid" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Original">
+                      </Parameter>
+                    </Parameters>
+                  </DbCommand>
+                </DeleteCommand>
+                <InsertCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>INSERT INTO [MemberInfo] ([memberid], [address], [phone], [firstname], [lastname]) VALUES (@memberid, @address, @phone, @firstname, @lastname);
+SELECT memberid, address, phone, firstname, lastname, DATALENGTH(avatar) AS AvatarSize FROM MemberInfo WHERE (memberid = @memberid)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="False" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@memberid" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="AnsiString" Direction="Input" ParameterName="@address" Precision="0" ProviderType="VarChar" Scale="0" Size="0" SourceColumn="address" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="AnsiString" Direction="Input" ParameterName="@phone" Precision="0" ProviderType="VarChar" Scale="0" Size="0" SourceColumn="phone" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="AnsiString" Direction="Input" ParameterName="@firstname" Precision="0" ProviderType="VarChar" Scale="0" Size="0" SourceColumn="firstname" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="AnsiString" Direction="Input" ParameterName="@lastname" Precision="0" ProviderType="VarChar" Scale="0" Size="0" SourceColumn="lastname" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                    </Parameters>
+                  </DbCommand>
+                </InsertCommand>
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="True">
+                    <CommandText>SELECT memberid, address, phone, firstname, lastname, DATALENGTH(avatar) AS AvatarSize FROM MemberInfo</CommandText>
+                    <Parameters>
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+                <UpdateCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>UPDATE [MemberInfo] SET [memberid] = @memberid, [address] = @address, [phone] = @phone, [firstname] = @firstname, [lastname] = @lastname WHERE (([memberid] = @Original_memberid));
+SELECT memberid, address, phone, firstname, lastname, DATALENGTH(avatar) AS AvatarSize FROM MemberInfo WHERE (memberid = @memberid)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="False" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@memberid" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="AnsiString" Direction="Input" ParameterName="@address" Precision="0" ProviderType="VarChar" Scale="0" Size="0" SourceColumn="address" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="AnsiString" Direction="Input" ParameterName="@phone" Precision="0" ProviderType="VarChar" Scale="0" Size="0" SourceColumn="phone" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="AnsiString" Direction="Input" ParameterName="@firstname" Precision="0" ProviderType="VarChar" Scale="0" Size="0" SourceColumn="firstname" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="AnsiString" Direction="Input" ParameterName="@lastname" Precision="0" ProviderType="VarChar" Scale="0" Size="0" SourceColumn="lastname" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="False" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@Original_memberid" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Original">
+                      </Parameter>
+                    </Parameters>
+                  </DbCommand>
+                </UpdateCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="address" DataSetColumn="address" />
+              <Mapping SourceColumn="phone" DataSetColumn="phone" />
+              <Mapping SourceColumn="photo" DataSetColumn="photo" />
+              <Mapping SourceColumn="firstname" DataSetColumn="firstname" />
+              <Mapping SourceColumn="lastname" DataSetColumn="lastname" />
+              <Mapping SourceColumn="AvatarSize" DataSetColumn="AvatarSize" />
+              <Mapping SourceColumn="memberid" DataSetColumn="memberid" />
+            </Mappings>
+            <Sources>
+              <DbSource ConnectionRef="OrganMapDB (Web.config)" DbObjectName="dbo.MemberInfo" DbObjectType="Table" EnableWebMethods="False" GenerateMethods="Get" GeneratePagingMethods="False" GenerateShortCommands="True" GeneratorGetMethodName="GetMember" GetMethodName="GetMember" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="True" UserGetMethodName="GetMember" UserSourceName="GetMember1">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="True">
+                    <CommandText>SELECT DATALENGTH(avatar) AS AvatarSize, address, firstname, lastname, memberid, phone FROM MemberInfo WHERE (memberid = @id)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="False" AutogeneratedName="id" ColumnName="memberid" DataSourceName="[D:\Documents and Settings\samsp\Desktop\OrganMapsite project\OrganMap site\App_Data\OrganMapsite.mdf].dbo.MemberInfo" DataTypeServer="uniqueidentifier" DbType="Guid" Direction="Input" ParameterName="@id" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="16" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </Sources>
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorName="MemberInfo1TableAdapter" GeneratorDataComponentClassName="MemberInfo1TableAdapter" GeneratorDataComponentInterfaceName="IMemberImageTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" Name="MemberInfo1" UserDataComponentName="MemberInfo1TableAdapter" WebServiceAttribute="False">
+            <MainSource>
+              <DbSource ConnectionRef="OrganMapDB (Web.config)" DbObjectName="dbo.MemberInfo" DbObjectType="Table" EnableWebMethods="False" GenerateMethods="Get" GeneratePagingMethods="False" GenerateShortCommands="True" GeneratorGetMethodName="GetData" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="False" UserGetMethodName="GetData" UserSourceName="GetData">
+                <DeleteCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>DELETE FROM [MemberInfo] WHERE (([memberid] = @Original_memberid))</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="False" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@Original_memberid" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Original">
+                      </Parameter>
+                    </Parameters>
+                  </DbCommand>
+                </DeleteCommand>
+                <InsertCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>INSERT INTO [MemberInfo] ([memberid], [avatar]) VALUES (@memberid, @avatar);
+SELECT memberid, avatar FROM MemberInfo WHERE (memberid = @memberid)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="False" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@memberid" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="Binary" Direction="Input" ParameterName="@avatar" Precision="0" ProviderType="Image" Scale="0" Size="0" SourceColumn="avatar" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                    </Parameters>
+                  </DbCommand>
+                </InsertCommand>
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="True">
+                    <CommandText>SELECT memberid, avatar FROM MemberInfo WHERE (memberid = @memberid)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="False" AutogeneratedName="memberid" ColumnName="memberid" DataSourceName="[D:\Documents and Settings\samsp\Desktop\OrganMapsite project\OrganMap site\App_Data\OrganMapsite.mdf].dbo.MemberInfo" DataTypeServer="uniqueidentifier" DbType="Guid" Direction="Input" ParameterName="@memberid" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="16" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+                <UpdateCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>UPDATE [MemberInfo] SET [memberid] = @memberid, [avatar] = @avatar WHERE (([memberid] = @Original_memberid));
+SELECT memberid, avatar FROM MemberInfo WHERE (memberid = @memberid)</CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="False" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@memberid" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="True" AutogeneratedName="" DataSourceName="" DbType="Binary" Direction="Input" ParameterName="@avatar" Precision="0" ProviderType="Image" Scale="0" Size="0" SourceColumn="avatar" SourceColumnNullMapping="False" SourceVersion="Current">
+                      </Parameter>
+                      <Parameter AllowDbNull="False" AutogeneratedName="" DataSourceName="" DbType="Guid" Direction="Input" ParameterName="@Original_memberid" Precision="0" ProviderType="UniqueIdentifier" Scale="0" Size="0" SourceColumn="memberid" SourceColumnNullMapping="False" SourceVersion="Original">
+                      </Parameter>
+                    </Parameters>
+                  </DbCommand>
+                </UpdateCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="avatar" DataSetColumn="avatar" />
+              <Mapping SourceColumn="memberid" DataSetColumn="memberid" />
+            </Mappings>
+            <Sources>
+            </Sources>
+          </TableAdapter>
+        </Tables>
+        <Sources>
+        </Sources>
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="DataSet" msprop:Generator_DataSetName="DataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="MemberInfo" msprop:Generator_UserTableName="MemberInfo" msprop:Generator_TableClassName="MemberInfoDataTable" msprop:Generator_RowClassName="MemberInfoRow" msprop:Generator_RowEvArgName="MemberInfoRowChangeEvent" msprop:Generator_RowEvHandlerName="MemberInfoRowChangeEventHandler" msprop:Generator_TablePropName="MemberInfo" msprop:Generator_TableVarName="tableMemberInfo">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="address" msprop:Generator_UserColumnName="address" msprop:Generator_ColumnVarNameInTable="columnaddress" msprop:Generator_ColumnPropNameInRow="address" msprop:Generator_ColumnPropNameInTable="addressColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="phone" msprop:Generator_UserColumnName="phone" msprop:Generator_ColumnVarNameInTable="columnphone" msprop:Generator_ColumnPropNameInRow="phone" msprop:Generator_ColumnPropNameInTable="phoneColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="photo" msprop:Generator_UserColumnName="photo" msprop:Generator_ColumnVarNameInTable="columnphoto" msprop:Generator_ColumnPropNameInRow="photo" msprop:Generator_ColumnPropNameInTable="photoColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="firstname" msprop:Generator_UserColumnName="firstname" msprop:Generator_ColumnPropNameInRow="firstname" msprop:Generator_ColumnVarNameInTable="columnfirstname" msprop:Generator_ColumnPropNameInTable="firstnameColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="lastname" msprop:Generator_UserColumnName="lastname" msprop:Generator_ColumnPropNameInRow="lastname" msprop:Generator_ColumnVarNameInTable="columnlastname" msprop:Generator_ColumnPropNameInTable="lastnameColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="AvatarSize" msdata:ReadOnly="true" msprop:Generator_UserColumnName="AvatarSize" msprop:Generator_ColumnPropNameInRow="AvatarSize" msprop:Generator_ColumnVarNameInTable="columnAvatarSize" msprop:Generator_ColumnPropNameInTable="AvatarSizeColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="memberid" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="memberid" msprop:Generator_ColumnPropNameInRow="memberid" msprop:Generator_ColumnVarNameInTable="columnmemberid" msprop:Generator_ColumnPropNameInTable="memberidColumn" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="MemberInfo1" msprop:Generator_UserTableName="MemberInfo1" msprop:Generator_TableClassName="MemberInfo1DataTable" msprop:Generator_RowClassName="MemberInfo1Row" msprop:Generator_RowEvArgName="MemberInfo1RowChangeEvent" msprop:Generator_RowEvHandlerName="MemberInfo1RowChangeEventHandler" msprop:Generator_TablePropName="MemberInfo1" msprop:Generator_TableVarName="tableMemberInfo1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="avatar" msprop:Generator_UserColumnName="avatar" msprop:Generator_ColumnPropNameInRow="avatar" msprop:Generator_ColumnVarNameInTable="columnavatar" msprop:Generator_ColumnPropNameInTable="avatarColumn" type="xs:base64Binary" minOccurs="0" />
+              <xs:element name="memberid" msdata:DataType="System.Guid, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_UserColumnName="memberid" msprop:Generator_ColumnPropNameInRow="memberid" msprop:Generator_ColumnVarNameInTable="columnmemberid" msprop:Generator_ColumnPropNameInTable="memberidColumn" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:MemberInfo" />
+      <xs:field xpath="mstns:memberid" />
+    </xs:unique>
+    <xs:unique name="MemberInfo1_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:MemberInfo1" />
+      <xs:field xpath="mstns:memberid" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

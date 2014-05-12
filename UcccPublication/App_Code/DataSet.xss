@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="Windows-1252"?>
+<DiagramLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ex:showrelationlabel="False" ViewPortX="0" ViewPortY="0" xmlns:ex="urn:schemas-microsoft-com:xml-msdatasource-layout-extended" xmlns="urn:schemas-microsoft-com:xml-msdatasource-layout">
+  <Shapes>
+    <Shape ID="DesignTable:MemberInfo" ZOrder="2" X="86" Y="74" Height="196" Width="197" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="135" />
+    <Shape ID="DesignTable:MemberInfo1" ZOrder="1" X="438" Y="173" Height="100" Width="204" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="55" />
+  </Shapes>
+  <Connectors />
+</DiagramLayout>

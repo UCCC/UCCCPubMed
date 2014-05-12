@@ -1,0 +1,700 @@
+A
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  color:#333399;
+}
+
+A:hover
+{
+  color:#cc0033;
+}
+
+BODY
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  background-color:white;
+  text-align:center;
+  color:#000000;
+  font-weight:normal;
+}
+
+
+
+.clsAlert
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:normal;
+  color:#cc0033;
+  text-align:center;
+  vertical-align:baseline;
+}
+
+.clsAlert A
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:normal;
+  color:#cc0033;
+  text-align:center;
+  vertical-align:baseline;
+}
+
+.clsAlertLabel
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:normal;
+  color:#cc0033;
+  text-align:right;
+  vertical-align:super;
+}
+
+.clsAlertLabelBold
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:bold;
+  color:#cc0033;
+  text-align:right;
+  vertical-align:middle;
+}
+
+
+.clsAlphaNav
+{
+  padding:2;
+  border:3;
+  font-family:Arial,sans-serif;
+  font-size:10pt;
+}
+
+.clsAlphaNav A:visited
+{
+  color:#009900;
+}
+
+.clsArrayCellHeader
+{
+	color:#333399;
+	text-align:center;
+	font-weight:bold;
+	font-size:14pt;
+}
+
+.clsBrowseAlert
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:normal;
+  color:#cc0033;
+  text-align:left;
+}
+
+.clsBrowseOK
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:normal;
+  color:#009900;
+  text-align:left;
+}
+.clsHint
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:normal;
+  color:#009900;
+  text-align:left;
+}
+
+.clsBrowseTitle
+{
+	font-family:Arial, sans-serif;
+	color:#FFFFFF;
+	font-size:9pt;
+	font-weight:normal;
+	background-color:#6666cc;
+	text-align:left;
+	padding-left:10;
+	padding-top:5;
+	padding-bottom:5;
+}
+
+.clsCategory
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#333399;
+  font-weight:bold;
+  text-align:left;
+}
+
+.clsCellBorder
+{
+  border-style:solid;
+  border-width:2;
+  border-color:#6666cc;
+  background-color:#FFFFFF;
+  vertical-align:super;
+}
+
+.clsCheckBox
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#000000;
+  text-align:left;
+}
+
+.clsEvenTableRow
+{
+	color:black;
+	font-size:9pt;
+	font-weight:normal;
+	background-color:#EDEDED;
+	text-align:left;
+	vertical-align:middle;
+	padding:9;
+}
+
+.clsFieldContents
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#000000;
+  text-align:left;
+   font-weight:normal;
+  vertical-align:middle;
+}
+
+.clsFieldContentsTop
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#000000;
+  text-align:left;
+  vertical-align:top;
+}
+
+.clsForm
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  background-color:#EFEFEF;
+  text-align:center;
+  color:#333399;
+  margin-right:10;
+  margin-left:10;
+}
+
+.clsFormAlert
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:normal;
+  color:#cc0033;
+  text-align:left;
+  vertical-align:middle;
+  padding-left:9;
+}
+
+.clsFormHR
+{
+  background-color:#EFEFEF;
+}
+
+.clsFormLabel
+{
+  font-family:Arial;
+  font-size:9pt;
+  color:#333399;
+  font-weight:normal;
+  text-align:right;
+  vertical-align:middle;
+}
+
+.clsFormLabelTop
+{
+  font-family:Arial;
+  font-size:9pt;
+  color:#333399;
+  font-weight:normal;
+  text-align:right;
+  vertical-align:top;
+}
+.clsFormLabelLeft
+{
+  font-family:Arial;
+  font-size:9pt;
+  color:#333399;
+  font-weight:normal;
+  text-align:left;
+  vertical-align:middle;
+}
+.clsFormLabelLeftTop
+{
+  font-family:Arial;
+  font-size:9pt;
+  color:#333399;
+  font-weight:normal;
+  text-align:left;
+  vertical-align:top;
+}
+
+.clsFormListLabel
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#333399;
+  font-weight:bold;
+  text-align:left;
+  vertical-align:middle;
+  background-color:#efefef;
+}
+
+.clsFormTopLabel
+{
+  font-family:Arial;
+  font-size:9pt;
+  color:#333399;
+  font-weight:normal;
+  text-align:right;
+  vertical-align:top;
+}
+
+.clsInfoBox
+{
+  font-size:9pt;
+  font-weight:normal;
+  text-align:left;
+  vertical-align:super;
+  color:#333399;
+  padding:10;
+  background-color:#ffffcc;
+}
+
+.clsInfoBoxHolder
+{
+  vertical-align:super;
+  padding:5;
+}
+
+.clsInfoBoxTitle
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:bold;
+  text-align:center;
+  color:#333399;
+}
+
+.clsLeftNav
+{
+  padding:5;
+}
+
+.clsLeftNav A
+{
+  color:#FFFFFF;
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+.clsLeftNav A:hover
+{
+  color:#ffcc00;
+  background-color:transparent;
+}
+
+.clsLeftNav span
+{
+  color:#FFFFFF;
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  font-weight:bold;
+  text-decoration:none;
+}
+.clsLine
+{
+  border-bottom-color:#EEEEEE;
+  border-bottom-width:1;
+  border-bottom-style:solid;
+}
+
+.clsListHolder
+{
+  vertical-align:top;
+  text-align:center;
+  padding:10;
+}
+
+.clsLoggedIn
+{
+  font-family:Arial, sans-serif;
+  font-size:8pt;
+  background-color:white;
+  text-align:right;
+  color:#333399;
+  font-weight:normal;
+}
+
+.clsLoginButton
+{
+  color:#333399;
+  text-align:center;
+  font-size:9pt;
+  font-weight:bold;
+}
+
+.clsMenuLeft
+{
+  vertical-align:top;
+  text-align:left;
+  width:140;
+}
+
+.clsNavTitle
+{
+	color:#333399;
+	font-size:9pt;
+	font-weight:bold;
+    text-align:left;
+}
+
+.clsOddTableRow
+{
+	color:black; 
+	font-size:9pt;
+	font-weight:normal;
+	background-color:white; 
+	text-align:left;
+	vertical-align:middle;
+	padding:9;
+}
+
+.clsOption
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#000000;
+  vertical-align:super;
+}
+
+.clsOptionalLabel
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#333399;
+  font-weight:normal;
+  font-style:italic;
+  text-align:right;
+  vertical-align:super;
+}
+
+.clsPaddedTable
+{
+  border-width:0;
+  text-align:center;
+  background-color:#FFFFFF;
+  vertical-align:top;
+}
+
+.clsPageNumber
+{
+  color:#000000;
+  font-size:10pt;
+}
+
+.clsPrintTitle
+{
+  font-size:9pt;
+  font-weight:bold;
+  color:#000000;
+  text-align:left;
+}
+
+.clsRectangle
+{
+  background-color:#ccccff;
+  height:15;
+  padding:0;
+}
+
+.clsSubcategory
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#333399;
+  font-weight:normal;
+  text-align:left;
+}
+
+.clsSubmitButton
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  text-align:center;
+  color:#333399;
+  margin-top:10;
+}
+
+.clsSubTitle
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:normal;
+  text-align:center;
+  color:#333399;
+}
+
+.clsSuperNavTable
+{
+  border-width:0;
+  padding:0;
+  margin:0;
+  text-align:center;
+  background-color:#FFFFFF;
+}
+
+.clsSuperWideSelect
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  width:600;
+  color:#000000;
+  text-align:left;
+  vertical-align:super;
+}
+
+
+.clsTab
+{
+  background-color:#FFFFFF;
+  text-align:center;
+  border-width:0;
+  padding:0;
+  width:72;
+}
+
+.clsTable
+{
+  border-width:0;
+  padding:0;
+  text-align:center;
+  background-color:#FFFFFF;
+  vertical-align:super;
+}
+
+.clsTableHeader
+{
+	color:#333399;
+	background-color:#EDEDED;
+	text-align:left;
+	font-weight:bold;
+	font-size:9pt;
+}
+.clsTableHeader2
+{
+	color:#333399;
+	text-align:left;
+	font-weight:bold;
+	font-size:9pt;
+}
+.clsTableRowNumbers
+{
+	font-family:Arial,sans-serif;
+	color:Black;
+	font-size:9pt;
+	font-weight: normal;
+	background-color:white; 
+	text-align:left;
+	vertical-align:middle;
+	padding:9;
+}
+
+.clsText
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#333399;
+  font-weight:normal;
+  text-align:left;
+}
+.clsTextTop
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#333399;
+  font-weight:normal;
+  text-align:left;
+  vertical-align:top;
+}
+
+.clsTextField
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#000000;
+  text-align:left;
+  padding-left:10px;
+  vertical-align:middle;
+   font-weight:normal;
+}
+
+.clsTextFieldTop
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#000000;
+  text-align:left;
+  padding-left:10px;
+  vertical-align:top;
+}
+.clsThinRectangle
+{
+  background-color:#6666cc;
+  height:3;
+}
+
+.clsTitle
+{
+	color:#333399;
+	font-size:9pt;
+	font-weight:bold;
+	text-align:center;
+}
+
+.clsTitleInForm
+{
+	color:#333399;
+	font-size:9pt;
+	font-weight:bold;
+	text-align:left;
+}
+
+.clsTopTitle
+{
+  background-color:#6666cc;
+  height:25;
+  padding:10;
+  color:#ffffff;
+  font-size:9pt;
+  font-weight:bold;
+  text-align:center;
+}
+
+.clsTopTitle2
+{
+  background-color:#ccccff;
+  height:25;
+  padding:10;
+  color:#333399;
+  font-size:9pt;
+  font-weight:bold;
+  text-align:center;
+}
+
+.clsUpdateMessage
+{
+  font-family:Arial, sans-serif;
+  font-size:9pt;
+  font-weight:normal;
+  text-align:center;
+  vertical-align:baseline;
+  color:#009900;
+}
+
+.clsUpperTitle
+{
+  font-weight:bold;
+}
+
+.clsWideSelect
+{
+  font-family:Arial,sans-serif;
+  width:500;
+  color:#000000;
+  text-align:left;
+  vertical-align:super;
+}
+
+.vrTextURL
+{
+  font-family:Arial,sans-serif;
+  font-size:9pt;
+  color:#333399;
+  text-align:left;
+  vertical-align:middle;
+}
+
+ul.hover_block li{
+	list-style:none;
+	float:left;
+	background: #fff;
+	padding: 10px;
+	width:300px; position: relative;
+	margin-right: 20px; }
+
+ul.hover_block li a {
+	display: block;
+	position: relative;
+	overflow: hidden;
+	height: 150px;
+	width: 268px;
+	padding: 16px;
+	color: #000;
+	font: 1.6em/1.3 Helvetica, Arial, sans-serif;
+}
+
+ul.hover_block li a { text-decoration: none; }
+
+ul.hover_block li img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border: 0;
+}
+
+ul.thumb {
+	float: left;
+	list-style: none;
+	margin: 0; padding: 10px;
+	width: 360px;
+}
+ul.thumb li {
+	margin: 0; padding: 5px;
+	float: left;
+	position: relative;  /* Set the absolute positioning base coordinate */
+	width: 110px;
+	height: 110px;
+}
+ul.thumb li img {
+	width: 100px; height: 100px; /* Set the small thumbnail size */
+	-ms-interpolation-mode: bicubic; /* IE Fix for Bicubic Scaling */
+	border: 1px solid #ddd;
+	padding: 5px;
+	background: #f0f0f0;
+	position: absolute;
+	left: 0; top: 0;
+}
+ul.thumb li img.hover {
+	background:url(thumb_bg.png) no-repeat center center;  /* Image used as background on hover effect
+	border: none; /* Get rid of border on hover */
+}
+
+.gridStyle caption
+{
+	color:Red;
+	font-weight :bold;
+}
+
+ .dynamicCSS 
+ 
+{ 
+      text-align:left; 
+} 

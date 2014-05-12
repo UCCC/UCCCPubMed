@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="/" title=""  description=""  roles="*">
+    <siteMapNode url="~/default.aspx" title="Home" description="Welcome page" visible="true" />
+    <siteMapNode url="GetPubMedData.aspx" title="Get PubMed Data"  description="Get PubMed Data" visible="true"  />
+    <siteMapNode url="ConfirmPublication.aspx" title="Confirm Publication"  description="Confirm Publication" visible="true"  />
+    <siteMapNode url="AddPublication.aspx" title="Add Publication"  description="Add Publication" visible="true"  />
+    <siteMapNode url="link_list.aspx" title="Links"  description="Useful links" visible="false"  />
+    <siteMapNode url="Admin.aspx" title="Administration"  description="Administration" visible="true"  />
+    <siteMapNode url="About.aspx" title="About"  description="Contact, Feedback, Password" visible="true"  />
+    <siteMapNode url="Help.aspx" title="Help"  description="Instructions for navigating bronchial map" target="_blank"  />
+  </siteMapNode>
+</siteMap>
+    <!--
+    <siteMapNode url="member_redirect.aspx" title="Membership"  description="Member registration"  />
+    <siteMapNode url="member_redirect.aspx" title="User"  description="Member registration"  />
+    -->

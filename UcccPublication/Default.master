@@ -1,0 +1,270 @@
+﻿<%@ Master Language="C#" %>
+<%@ Import Namespace="System.Xml"%> 
+<%@ Import Namespace="System.Data"%> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<script runat="server">
+    protected void Page_Load(object sender, System.EventArgs e)
+    {
+        string userIdStr = (string)Session["userId"];
+        string roleIdStr;
+        if (userIdStr == null)
+        {
+            roleIdStr = "4";
+        }
+        else
+        {
+            roleIdStr = (string)Session["roleId"];
+        }
+
+        if (roleIdStr == "" || roleIdStr == null)
+        {
+            roleIdStr = "4";
+        }
+        
+        if (roleIdStr == "1")
+        {
+        }
+        else if (roleIdStr == "2")
+        {
+            MenuItem miEditPubs = Menu1.FindItem("Edit Pubs");
+            miEditPubs.ChildItems.RemoveAt(4);
+            miEditPubs.ChildItems.RemoveAt(3);
+            miEditPubs.ChildItems.RemoveAt(2);
+            miEditPubs.ChildItems.RemoveAt(0);
+            Menu1.Items.Remove(Menu1.FindItem("Quick Search"));
+            Menu1.Items.Remove(Menu1.FindItem("Add Edit Pub"));
+            Menu1.Items.Remove(Menu1.FindItem("Configuration"));
+            Menu1.Items.Remove(Menu1.FindItem("System"));
+        }
+        else
+        {
+            Menu1.Items.Remove(Menu1.FindItem("Home"));
+            Menu1.Items.Remove(Menu1.FindItem("Quick Search"));
+            Menu1.Items.Remove(Menu1.FindItem("Reports"));
+            Menu1.Items.Remove(Menu1.FindItem("Statistics"));
+            Menu1.Items.Remove(Menu1.FindItem("Edit Pubs"));
+            Menu1.Items.Remove(Menu1.FindItem("Add Edit Pub"));
+            Menu1.Items.Remove(Menu1.FindItem("Configuration"));
+            Menu1.Items.Remove(Menu1.FindItem("System"));
+        }
+    }
+
+
+    private void Menu_ItemDataBound(object sender, MenuEventArgs e)
+    {
+        string roleIdStr = (string)Session["roleId"];
+        if (roleIdStr == "" || roleIdStr == null)
+        {
+            roleIdStr = "4";
+        }
+        Menu MyMenu = (Menu)Master.FindControl("Menu1");
+
+        if (roleIdStr == "3" || roleIdStr == "4")
+        {
+            MyMenu.Items.RemoveAt(4);
+        }
+
+        //MyMenu.Items.Remove(e.Item);
+        
+
+        /*
+        if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem) 
+        {
+            HyperLink hl = (HyperLink)e.Item.FindControl("HyperLink1");
+            string txt = hl.Text;
+            string url = hl.NavigateUrl;
+            switch (txt)
+            {
+                case "Edit Pubs":
+                    if (roleIdStr == "3" || roleIdStr == "4")
+                    {
+                        hl.Visible = false;
+                    }
+                    break;
+                case "Configuration":
+                    if (roleIdStr != "1" || roleIdStr == "5")
+                    {
+                        hl.Visible = false;
+                    }
+                    break;
+                case "Statistics":
+                    if (roleIdStr == "4")
+                    {
+                        hl.Visible = false;
+                    }
+                    break;
+                case "Reports":
+                    if (roleIdStr == "3" || roleIdStr == "4")
+                    {
+                        hl.Visible = false;
+                    }
+                    break;
+                default:
+                    hl.Visible = true;
+                    break;
+            }
+                    
+        } 
+         * */
+    }
+</script>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head runat="server">
+    <title>Publication Manager</title>
+     <link type="text/css" rel="Stylesheet" href="pubsite.css" />
+	<link href="~/css/CCGeneral.css" type="text/css" rel="STYLESHEET" />
+	<script type="text/javascript" src='<%= ResolveClientUrl("~/js/formscripts.js") %>'></script>
+	<script type="text/javascript" src='<%= ResolveClientUrl("~/js/date_picker.js") %>'></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.3.2.js" type="text/javascript"></script>       
+    <script src="http://ajax.microsoft.com/ajax/beta/0911/Start.debug.js" type="text/javascript"></script>  
+    <script src="http://ajax.microsoft.com/ajax/beta/0911/extended/ExtendedControls.debug.js" type="text/javascript"></script>  
+    <style type="text/css">
+        .PleaseWait
+        {
+            height : 13px;
+            width: 150;
+            background-image: url(images/progress6.gif);
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body>
+    <div id="poster2">
+        <h1>
+            <a href="default.aspx"></a></h1>
+    </div>
+    <div class="none">
+        <a href="#content_start">Skip Repetitive Navigational Links</a></div>
+    <form id="form1" runat="server">
+    <div id="bronchnavtop" style="text-align:center">
+        <asp:Menu ID="Menu1" runat="server" Orientation="Horizontal" 
+            StaticSubMenuIndent="10px" DynamicHorizontalOffset="2" 
+            Font-Names="Verdana" Font-Size="Small" ForeColor="#284E98" 
+            EnableViewState="False" IncludeStyleBlock="False" 
+            StaticEnableDefaultPopOutImage="False">
+            <DynamicHoverStyle BackColor="#284E98" ForeColor="White" />
+            <DynamicMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" 
+                CssClass="dynamicCSS" />
+            <DynamicMenuStyle BackColor="#B5C7DE" />
+            <DynamicSelectedStyle BackColor="#507CD1" />
+            <Items>
+                <asp:MenuItem NavigateUrl="~/Default.aspx" Text="Home" Value="Home">
+                </asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~/QuickLook.aspx" Text="Quick Search" 
+                    Value="Quick Search"></asp:MenuItem>
+                <asp:MenuItem Text="Configuration" Value="Configuration">
+                    <asp:MenuItem NavigateUrl="~/RetrievePub.aspx" Text="Retrieve Publications" 
+                        Value="Retrieve Publications"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/ProcessAuthor.aspx" Text="Process Membership" 
+                        Value="Process Membership"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/ProcessPublication.aspx" Text="Process Publications" 
+                        Value="Process Publications"></asp:MenuItem>
+                </asp:MenuItem>
+                <asp:MenuItem Text="Edit Pubs" Value="Edit Pubs">
+                    <asp:MenuItem NavigateUrl="~/SetAuthorship.aspx" 
+                        Text="Set Authorships" Value="Set Authorships"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/SetFocusGroup.aspx" Text="Set Focus Groups" 
+                        Value="Set Focus Groups"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/SetProgram.aspx" Text="Set Program" 
+                        Value="Set Program"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/SetSharedResource.aspx" Text="Set Shared Resource" 
+                        Value="Shared Resource"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/SetFullTextUrl.aspx" Text="Set Full Text URL" 
+                        Value="Set Full Text URL"></asp:MenuItem>
+                </asp:MenuItem>
+                <asp:MenuItem Text="Add Pub" 
+                    Value="Add Edit Pub">
+                    <asp:MenuItem NavigateUrl="~/AddPublication.aspx" Text="Add Pub" 
+                        Value="Add Pub"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/EditPub.aspx" Text="Edit Pub Info" 
+                        Value="Edit Pub Info"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/DeletePublication.aspx" Text="Delete Pub" 
+                        Value="Delete Pub"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/CollectiveNameClient.aspx" Text="Collective Name" 
+                        Value="Collective Name"></asp:MenuItem>
+                </asp:MenuItem>
+                <asp:MenuItem Text="Reports" Value="Reports">
+                    <asp:MenuItem NavigateUrl="~/Reporting.aspx" Text="Report" Value="Report">
+                    </asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/Inventory.aspx" Text="Inventory" Value="Inventory">
+                    </asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/ForEndNote.aspx" Text="For EndNote" 
+                        Value="For EndNote"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/PmidCSVtoReport.aspx" Text="PMID CSV File" 
+                        Value="PMID CSV File"></asp:MenuItem>
+                </asp:MenuItem>
+                <asp:MenuItem Text="Statistics" Value="Statistics">
+                    <asp:MenuItem Text="Publications" Value="Publications">
+                        <asp:MenuItem NavigateUrl="~/ProgramPublicationStat.aspx" Text="By Program" 
+                            Value="By Program"></asp:MenuItem>
+                        <asp:MenuItem NavigateUrl="~/MemberPublicationStat.aspx" Text="By Member" 
+                            Value="By Member"></asp:MenuItem>
+                    </asp:MenuItem>
+                    <asp:MenuItem Text="Cross Prog Pubs" Value="Cross Prog Pubs">
+                        <asp:MenuItem NavigateUrl="~/CrossProgramPubByProgram.aspx" Text="By Program" 
+                            Value="By Program"></asp:MenuItem>
+                        <asp:MenuItem NavigateUrl="~/CrossProgramPubByMember.aspx" Text="By Member" 
+                            Value="By Member"></asp:MenuItem>
+                    </asp:MenuItem>
+                    <asp:MenuItem Text="Publication Types" Value="Publication Types">
+                        <asp:MenuItem NavigateUrl="~/ProgramPubType.aspx" Text="By Program" 
+                            Value="By Program"></asp:MenuItem>
+                        <asp:MenuItem NavigateUrl="~/MemberPubType.aspx" Text="By Member" 
+                            Value="By Member"></asp:MenuItem>
+                    </asp:MenuItem>
+                    <asp:MenuItem Text="Citations" Value="Citations">
+                        <asp:MenuItem NavigateUrl="~/ProgramCitation.aspx" Text="By Program" 
+                            Value="By Program"></asp:MenuItem>
+                        <asp:MenuItem NavigateUrl="~/MemberCitation.aspx" Text="By Member" 
+                            Value="By Member"></asp:MenuItem>
+                    </asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/SharedResourceStat.aspx" 
+                        Text="Shared Resources" Value="Shared Resources"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/JournalPublicationStat.aspx" 
+                        Text="Journals" Value="Journals"></asp:MenuItem>
+                </asp:MenuItem>
+                <asp:MenuItem Text="System" Value="System">
+                    <asp:MenuItem NavigateUrl="~/l_focus_group.aspx" Text="Focus Group" 
+                        Value="Focus Group"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/programLeader.aspx" Text="Program Leader" 
+                        Value="Program Leader"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/l_resource.aspx" Text="Shared Resource" 
+                        Value="Shared Resource"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/l_collective_name.aspx" 
+                        Text="Collective Name" Value="Collective Name"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/Member.aspx" Text="Member" Value="Member">
+                    </asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/l_program.aspx" Text="Program" Value="Program">
+                    </asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/l_institution.aspx" Text="Institution" 
+                        Value="Institution"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/MemberStatus.aspx" Text="Member Status" 
+                        Value="Member Status"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/MemberProgram.aspx" Text="Member Program" 
+                        Value="Member Program"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/MemberInstitution.aspx" Text="Member Institution" 
+                        Value="Member Institution"></asp:MenuItem>
+                </asp:MenuItem>
+            </Items>
+            <StaticHoverStyle BackColor="#284E98" ForeColor="White" />
+            <StaticMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" 
+                ItemSpacing="5px" />
+            <StaticSelectedStyle BackColor="#507CD1" />
+        </asp:Menu>
+    </div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </form>
+    <div id="navbottom">
+    </div>
+    <div id="footer">
+        <p>
+            Copyright &copy; 2014 University of Colorado Denver
+            <br />
+        </p>
+    </div>
+</body>
+</html>

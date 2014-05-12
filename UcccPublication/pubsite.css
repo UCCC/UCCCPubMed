@@ -1,0 +1,894 @@
+﻿html, body
+{
+  height: 100%;
+}
+
+body
+{
+    font-family: Tahoma, Verdana, Helvetica, Helvetica-Narrow, sans-serif;
+    margin: 0px;
+    background: #FED36B url(images/background_main.jpg) repeat-y center top;
+    font-size: 0.7em;
+}
+body#b_map_body
+{
+    font-family: Tahoma, Verdana, Helvetica, Helvetica-Narrow, sans-serif;
+    margin: 0px;
+    background: #FED36B url(images/background_fullwidth_1120.jpg) repeat-y center top;
+    font-size: 0.7em;
+}
+a:link
+{
+    color: #8A3700;
+}
+a:visited
+{
+    color: #542100;
+}
+a:hover
+{
+    text-decoration: none;
+    color: #A45521;
+}
+a:active
+{
+    text-decoration: none;
+    color: #000000;
+}
+
+input, select, textarea
+{
+    font-size:1em; 
+    font-family: arial, Verdana, Helvetica, Helvetica-Narrow, sans-serif;
+	margin-left: 0px;
+}
+
+/* Use headers in the markup for accessibility reasons but control look with styles below*/
+
+h1, h2, h3, h4, h5, h6
+{
+   margin: 2px 0 2px 0;
+}
+
+h1
+{
+    font-size: 28px;
+    font-weight: bold;
+   margin: 5px 0 5px 0;
+}
+
+
+h1 a:link, h1 a:visited, h1 a:hover, h1 a:active
+{
+    text-decoration: none;
+    color: #000000;
+}
+.membercard h3
+{
+    font-size: 1em;
+}
+
+ #loginbanner h2
+{
+    font-size: 1em;
+    font-weight: normal;
+    margin-top: 8px;
+}
+
+#poster h2
+{
+    font-size: 13px;
+    font-weight: bold;
+    color: #50700E;
+}
+#poster2 h2
+{
+    font-size: 13px;
+    font-weight: bold;
+    color: #50700E;
+}
+.leftblock h2, .rightblock h2, .fullwidth h2, .fullblock h2
+{
+    font-size: 1.6em;
+}
+
+.rightblock h3
+{
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0px;
+    padding: 0px;
+    display: block;
+}
+
+
+
+.eventmonth h3
+{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.eventlist label
+{
+    font-weight: bold;
+    padding-right: 4px;
+}
+
+/************************************************************************
+* 
+* Main navigation used by the masterpage
+*
+************************************************************************/
+
+/* Picture at the top of the site */
+#poster
+{
+    background: url(images/poster3.jpg) no-repeat;
+    margin-right: auto;
+    margin-left: auto;
+    width: 726px;
+    height: 139px;
+    margin-top: 17px;
+}
+#poster2
+{
+    background: url(images/poster3.jpg) no-repeat;
+    margin-right: auto;
+    margin-left: auto;
+    width: 726px;
+    height: 100px;
+    margin-top: 17px;
+}
+
+/* Navigation strips */
+    /*background: url(images/background_nav_main.gif) repeat-x;*/
+#navtop, #navbottom
+{
+    background: url(images/background_nav_main726x23.gif) repeat-x;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: Verdana, Helvetica, Helvetica-Narrow, Tahoma, sans-serif;
+    margin-right: auto;
+    margin-left: auto;
+    width: 726px;
+    height: 45px;
+}
+#navbottom
+{
+    margin-top: 15px;
+}
+    /*background: url(images/background_nav_main.gif) repeat-x;*/
+    /*height: 23px;*/
+#bronchnavtop
+{
+    background: url(images/background_nav_main726x23.gif) repeat-x;
+    font-size: 11px;
+    font-weight: bold;
+    font-family: Verdana, Helvetica, Helvetica-Narrow, Tahoma, sans-serif;
+    margin-right: auto;
+    margin-left: auto;
+    width: 726px;
+    height: 46px;
+}
+
+#footer
+{
+    width: 726px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    margin-top: 10px;
+    padding-bottom: 22px;
+    color: #C89F3D;
+}
+
+/* Make main navigation bars from a unordered list for easy update and better accessibility */
+
+    /*height: 19px;*/
+#navtop ul, #navbottom ul
+{
+    margin: 0px;
+    padding-top: 9px;
+    list-style-type: none;
+    height: 46px;
+    text-align: center;
+}
+#navtop ul li, #navbottom ul li
+{
+    display: inline;
+    color: #FFFFFF;
+    margin-right: 25px;
+}
+#navtop a:link, #navbottom a:link, #navtop a:visited, #navbottom a:visited
+{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+#navtop a:hover, #navbottom a:hover
+{
+    text-decoration: underline;
+}
+#navtop a:active, #navbottom a:active
+{
+    color: #FEFFBD;
+    text-decoration: none;
+}
+/*bronchnavtop */
+#bronchnavtop ul
+{
+    margin: 0px;
+    padding-top: 4px;
+    list-style-type: none;
+    height: 10px;
+    text-align: center;
+}
+#bronchnavtop ul li
+{
+    display: inline;
+    color: #FFFFFF;
+    margin-right: 25px;
+}
+#bronchnavtop a:link, #bronchnavtop a:visited
+{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+#bronchnavtop a:hover
+{
+    text-decoration: underline;
+}
+#bronchnavtop a:active
+{
+    color: #FEFFBD;
+    text-decoration: none;
+}
+
+/************************************************************************
+* 
+* Formatting common to most pages
+*
+************************************************************************/
+
+/* Main part of the page that holds contents */
+#body
+{
+    width: 726px;
+    margin-top: 7px;
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+	top: 0px;
+	left: 1px;
+}
+
+/* 2 column layout */
+#columnleft
+{
+    float: left;
+    width: 240px;
+    /*position: relative; */
+}
+
+#columnright
+{
+    margin-left: 245px;
+  /*  position:relative; */
+}
+
+#columnwhole
+{
+    float: left;
+    width: 580px;
+  /*  position:relative; */
+}
+
+.leftblock
+{
+    border: 1px solid #DBDB79;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #FEFAAB url(images/background_columnleft.gif) repeat-y;
+    vertical-align: top;
+}
+
+ .rightblock
+{
+    border: 1px solid #DBDB79;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #FEFFAB url(images/background_columnright.gif) repeat-y;
+    position: relative;
+    width:446px;
+}
+
+.fullblock
+{
+    border: 1px solid #DBDB79;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #FEFAAB url(images/background_main.jpg) repeat-y;
+    vertical-align: top;
+}
+
+
+ .wholeblock
+{
+    border: 1px solid #DBDB79;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #FEFFAB url(images/background_columnright.gif) repeat-y;
+    width:580px;
+}
+
+.clear2column
+{
+    margin:0;
+    padding:0;
+    line-height:0;
+    font-size:0px;
+    height:0px;
+    clear: both;
+}
+    
+
+/* A full width block on the page */
+
+.fullwidth, #loginbanner
+{
+    border: 1px solid #DBDB79;
+    width: 694px;
+    margin-right: auto;
+    margin-left: auto;
+    background: #FEFFAB url(images/background_fullwidth.jpg) repeat-y;
+    margin-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: left;
+}
+
+/* for the login block
+    picks up most of its properties from .fullwidth */
+
+#loginbanner
+{
+  padding-bottom: 0px;
+}
+
+/* Goes around controls that need to be presented as a block of functionality  */
+.controlblock
+{
+    border: 1px solid #DBDB79;
+    padding: 3px;
+    margin: 2px 0 5px 0;
+    vertical-align: top;
+}
+
+/* shows a visual seperation */
+.dashedline
+{
+    border-bottom: 1px dashed #DBCE6A;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    clear:right;
+	width: 689px;
+}
+
+/* Command buttons on pages */
+.actionbuttons
+{
+  text-align:right;
+  position: relative; 
+  padding: 1px 1px 1px 1px;
+}
+
+/************************************************************************
+* 
+* Calendar specific formatting 
+*
+************************************************************************/
+
+/* Surrounds the calendar */
+.eventmonth
+{
+    border: 1px solid #DBDB79;
+    width: 694px;
+    margin-right: auto;
+    margin-left: auto;
+    background: #FEFFAB url(images/background_fullwidth.jpg) repeat-y;
+    margin-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    text-align: center;
+}
+
+/* used as the cssclass of the actual calendar */
+.eventmonthtable
+{
+    width: 694px;
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+    margin-bottom: 15px;
+    border: 1px solid #DBDB79;
+    border-collapse:collapse;
+}
+
+
+.dayNumber
+{
+    float: right;
+    border-bottom: 1px solid #C7C272;
+    border-left: 1px solid #C7C272;
+    clear: none;
+    padding: 2px;
+}
+
+
+.calcurrentmonth
+{
+    /* no styles needed at this time */
+}
+.calothermonth
+{
+    background-color: #DCD78E;
+}
+.calcurrentday
+{
+    background-color: #FFFFC1;
+}
+.calweekend
+{
+    background-color: #FEEB95;
+  /*  width: 15%; */
+}
+
+.calcurrentmonth , .calcurrentmonth , .calothermonth , .calcurrentday , .calweekend
+{
+    text-align: left;
+    border: 2px solid #C7C272;
+    height: 60px;
+    vertical-align: top;
+    /* needed for positioning the dayNumber part */
+    position:relative;
+     border-collapse:separate;
+     border-spacing: 5px;
+     
+}
+
+/************************************************************************
+* 
+* Next / previous specific formatting 
+*
+************************************************************************/
+
+.nextlink
+{
+    position:absolute;
+    right:0;
+    padding-right:15px;    
+}
+
+
+
+/************************************************************************
+* 
+* Global formatting
+*
+************************************************************************/
+
+/* all the legend tags use this same style */
+
+legend
+{
+    font-weight: bold;
+    color: #666666;
+    font-size: 1em;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-bottom: 7px;
+}
+
+/* apply zero margin to all forms and hide fieldset borders. Keep fieldset borders in the markup for better accessibility */
+
+form
+{
+    margin: 0px;
+}
+
+fieldset
+{
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+
+/* sometimes we hide elements from display in visual browsers (but leave them in the source for non visual browsers and for accessibility) */
+
+.hidden
+{
+    visibility: hidden;
+}
+.none
+{
+    display: none;
+}
+
+
+/************************************************************************
+* 
+* Image functionality
+*
+************************************************************************/
+
+.photo
+{
+    background: #FEFFC8 url(images/background_thumbnail.jpg) repeat-x center;
+    border: solid 1px #E8DCA3;
+    padding: 5px;    
+}
+
+.picture
+{
+    background: #FEFFC8 url(images/background_thumbnail.jpg) repeat-x center;
+    border: solid 1px #E8DCA3;
+    padding: 5px;
+    margin: 5px;  
+}
+
+/* add hover border to href thumbnail images */
+/*todo: rectify whether these should be .photo instead 
+
+.thumbnail a:link img, #thumbnail a:visited img
+{
+    border: 2px solid #883D08;
+}
+.thumbnail a:hover img
+{
+    border: 2px solid #FFFFFF;
+}
+.thumbnail a:active img
+{
+    border: 2px solid #000000;
+}
+*/
+
+/************************************************************************
+* 
+* List type pages
+*
+************************************************************************/
+
+/* represents each item in a vertical list */
+.listitem
+{
+    margin:0px 0px 0px 0px;
+    width:444px;
+}
+
+/* surrounds the buttons for list items */
+.editbuttons
+{
+    padding-top: 6px;
+}
+
+/* floats the thumbnail off to the right */
+.thumbnail
+{
+    float: right;
+    margin: 0 0 0 5px;
+}
+
+/*used to clear the float for the thumbnail */
+.clearlist
+{
+    clear:right;
+    margin:0;
+    padding:0;
+    height: 0px;
+    font-size:0px;
+    line-height:0px;
+}
+
+/* Used by the page number control */
+.PageNumbers
+{
+    display:inline;
+}
+
+.PageNumbers span
+{
+    padding-left: 3px;
+}
+
+.newscrumbs a
+{
+    font-weight: bold;
+    padding-right: 2px;
+}
+
+.linkcrumbs a
+{
+    font-weight: bold;
+    padding-right: 2px;
+}
+
+.sopcrumbs a
+{
+    font-weight: bold;
+    padding-right: 2px;
+}
+
+.inventorycrumbs a
+{
+    font-weight: bold;
+    padding-right: 2px;
+}
+
+.statisticscrumbs a
+{
+    font-weight: bold;
+    padding-right: 2px;
+}
+
+.protocolcrumbs a
+{
+    font-weight: bold;
+    padding-right: 2px;
+}
+
+.linkcrumbs a
+{
+    font-weight: bold;
+    padding-right: 2px;
+}
+
+/* Used in the two column lists */
+
+.membercard
+{
+    background-color: #FEFEB1;
+    border: 1px solid #E8DCA3;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 198px;
+}
+
+.clearcard
+{
+    clear:left;
+    height:0;
+    margin:0;
+    padding:0;
+}
+
+#membercardcolumnleft
+{
+    float: left;
+    position: relative;
+}
+#membercardcolumnright
+{
+    margin-left: 226px;
+}
+.membercard p
+{
+    margin: 5px;
+}
+
+/************************************************************************
+* 
+* Compact Event list
+*
+************************************************************************/
+
+
+/* define event grid view columns */
+/* todo: use or remove */
+
+.eventlistdate
+{
+    padding-right: 4px;
+}
+.eventlisticon
+{
+    text-align: center;
+}
+.eventlisttime
+{
+    text-align: center;
+    width: 95px;
+}
+.eventlistevent
+{
+    font-weight: bold;
+}
+.eventlistlocation
+{
+    /* no styles needed at this time */
+}
+.eventlist td
+{
+    padding-bottom: 4px;
+}
+
+/*
+.eventlist, .eventlist td, .eventlist tr
+{
+    border-style:none;
+}
+*/
+
+/************************************************************************
+* 
+* Rollover buttons
+*
+************************************************************************/
+
+.buttonsmall, .buttonsmall-ovr
+{
+    background: url(images/background_button_small.gif) repeat-x;
+    border: none;
+    color: #FFFFFF;
+    height: 22px;
+    font-weight: normal;
+    font-size: 9px;
+    padding-bottom: 9px;
+    padding-left: 3px;
+    padding-right: 3px;
+    cursor: pointer;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.buttonsmall-ovr
+{
+    text-decoration: underline;
+    background: url(images/background_button_small-ovr.gif) repeat-x;
+}
+
+/************************************************************************
+* 
+* Page specific 
+*
+************************************************************************/
+
+/* even dowload button */
+.downloadevent img
+{
+    margin-right: 5px;
+    vertical-align: middle;
+    border: none;
+}
+
+/* Header on view details type pages */
+.itemdetails
+{
+    font-size: 1.3em;
+}
+
+
+
+/************************************************************************
+* 
+* Photo selection controls
+*
+************************************************************************/
+
+#popupbody
+{
+    font-family: Tahoma, Verdana, Helvetica, Helvetica-Narrow, sans-serif;
+    margin: 0px;
+    background: #FED36B;
+    font-size: 0.7em;
+}
+
+#popupinner
+{
+    border: 1px solid #DBDB79;
+    margin: 5px;
+    background: #FEFFAB;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#popupbody h2
+{
+    font-weight: bold;
+    margin: 0px;
+    padding: 1px 0px 5px 5px;
+    display: block;
+}
+
+.selected, .unselected
+{
+    width: 80px;
+    height: 100px;
+    text-align: center;
+    padding: 2px 2px 2px 2px;
+}
+
+.unselected
+{
+    background-color: transparent;
+    border: solid 1px #FEFFAB;
+}
+
+.selected
+{
+     background: #FED36B;
+     border: solid 1px #DBDB79;
+}
+
+.scrollablelist
+{
+    overflow: auto;
+    height: 230px;
+    width: 460px;
+    border: solid 1px #DBDB79;
+}
+
+.scrollablelist2
+{
+    overflow: auto;
+    height: 230px;
+    width: 210px;
+    border: solid 1px #DBDB79;
+}
+
+
+.scrolledtable
+{
+}
+
+ .selectablephoto
+{
+    background: #FEFFC8 url(images/background_thumbnail.jpg) repeat-x center;
+    border: 1px solid #E8DCA3;
+    padding: 2px;
+}
+
+.contextbuttons
+{
+  margin: 5px 3px 5px 3px; 
+
+}
+
+/************************************************************************
+* 
+* Forms
+*
+************************************************************************/
+
+/* label column */
+.formlabel
+{
+    width:120px; 
+    vertical-align: top;
+}
+
+/* value column */
+.formvalue
+{
+    vertical-align: top;
+}
+
+.txtfield
+{
+}
+
+.txtblock
+{
+    width:300px;
+}
+
+table#
+{
+    background-color: #DCD78E;
+	text-align: left;
+}
+
+
