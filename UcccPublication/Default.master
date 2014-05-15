@@ -36,9 +36,10 @@
             Menu1.Items.Remove(Menu1.FindItem("Quick Search"));
             Menu1.Items.Remove(Menu1.FindItem("Add Edit Pub"));
             Menu1.Items.Remove(Menu1.FindItem("Configuration"));
+            Menu1.Items.Remove(Menu1.FindItem("Help"));
             Menu1.Items.Remove(Menu1.FindItem("System"));
         }
-        else
+        else //roleid = 3 or 4
         {
             Menu1.Items.Remove(Menu1.FindItem("Home"));
             Menu1.Items.Remove(Menu1.FindItem("Quick Search"));
@@ -47,6 +48,7 @@
             Menu1.Items.Remove(Menu1.FindItem("Edit Pubs"));
             Menu1.Items.Remove(Menu1.FindItem("Add Edit Pub"));
             Menu1.Items.Remove(Menu1.FindItem("Configuration"));
+            Menu1.Items.Remove(Menu1.FindItem("Help"));
             Menu1.Items.Remove(Menu1.FindItem("System"));
         }
     }
@@ -225,6 +227,10 @@
                         Text="Shared Resources" Value="Shared Resources"></asp:MenuItem>
                     <asp:MenuItem NavigateUrl="~/JournalPublicationStat.aspx" 
                         Text="Journals" Value="Journals"></asp:MenuItem>
+                </asp:MenuItem>
+                <asp:MenuItem Text="Help" Value="Help">
+                    <asp:MenuItem NavigateUrl="~/UserManual.pdf" Text="User Manual" 
+                        Value="User Manual"></asp:MenuItem>
                 </asp:MenuItem>
                 <asp:MenuItem Text="System" Value="System">
                     <asp:MenuItem NavigateUrl="~/l_focus_group.aspx" Text="Focus Group" 
