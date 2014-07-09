@@ -23,12 +23,16 @@
                     <asp:label id="lblName" runat="server" CssClass="clsAlert"></asp:label></DIV><br />
 
                 <asp:datagrid id="myDatagrid" runat="server" Font-Size="X-Small" 
-                        GridLines="Vertical" CellPadding="4"
+                    GridLines="Vertical" CellPadding="4"
 					BackColor="White" BorderWidth="1px" BorderStyle="None" BorderColor="#DEDFDE" 
-                        AutoGenerateColumns="False" OnDeleteCommand="myDatagrid_DeleteCommand"
-					OnEditCommand="myDatagrid_OnEditCommand" OnCancelCommand="myDatagrid_CancelCommand" 
-                        OnItemDataBound="myDatagrid_ItemDataBound" OnUpdateCommand="myDatagrid_UpdateCommand"
-					OnItemCommand="DoInsert" ShowFooter="True" ForeColor="Black">
+                    AutoGenerateColumns="False" 
+                    OnDeleteCommand="myDatagrid_DeleteCommand"
+					OnEditCommand="myDatagrid_OnEditCommand" 
+                    OnCancelCommand="myDatagrid_CancelCommand" 
+                    OnItemDataBound="myDatagrid_ItemDataBound" 
+                    OnUpdateCommand="myDatagrid_UpdateCommand"
+					OnItemCommand="DoInsert" 
+                    ShowFooter="True" ForeColor="Black">
 					<FooterStyle BackColor="#CCCC99"></FooterStyle>
 					<SelectedItemStyle Font-Bold="True" ForeColor="White" BackColor="#CE5D5A"></SelectedItemStyle>
 					<AlternatingItemStyle BackColor="White"></AlternatingItemStyle>
@@ -73,12 +77,11 @@
 								</asp:Label>
 							</ItemTemplate>
 							<EditItemTemplate>
-								<asp:TextBox id="txtStartDate" onblur="DateFormat(this,this.value,event,true,'1')" onkeyup="DateFormat(this,this.value,event,false,'1')" onfocus="javascript:vDateType='1'" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.start_date") %>'>
+								<asp:TextBox id="txtStartDate" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.start_date") %>'>
 								</asp:TextBox>
 							</EditItemTemplate>
 							<FooterTemplate>
-								<asp:TextBox ID="txtAddNewStartDate" onblur="DateFormat(this,this.value,event,true,'1')" onkeyup="DateFormat(this,this.value,event,false,'1')"
-									onfocus="javascript:vDateType='1'" Columns="5" Width="80px" Runat="Server" />
+								<asp:TextBox ID="txtAddNewStartDate" Columns="5" Width="80px" Runat="Server" />
 							</FooterTemplate>
 
                             <ItemStyle Width="80px"></ItemStyle>
@@ -89,12 +92,11 @@
 								</asp:Label>
 							</ItemTemplate>
 							<EditItemTemplate>
-								<asp:TextBox id="txtEndDate" onblur="DateFormat(this,this.value,event,true,'1')" onkeyup="DateFormat(this,this.value,event,false,'1')" onfocus="javascript:vDateType='1'" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.end_date") %>'>
+								<asp:TextBox id="txtEndDate" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.end_date") %>'>
 								</asp:TextBox>
 							</EditItemTemplate>
 							<FooterTemplate>
-								<asp:TextBox ID="txtAddNewEndDate" onblur="DateFormat(this,this.value,event,true,'1')" onkeyup="DateFormat(this,this.value,event,false,'1')"
-									onfocus="javascript:vDateType='1'" Columns="5" Width="80px" Runat="Server" />
+								<asp:TextBox ID="txtAddNewEndDate" Columns="5" Width="80px" Runat="Server" />
 							</FooterTemplate>
 
                             <ItemStyle Width="80px"></ItemStyle>
@@ -115,10 +117,15 @@
                             <ItemStyle Width="80px"></ItemStyle>
 						</asp:TemplateColumn>
 						<asp:TemplateColumn HeaderText="">
+                            <EditItemTemplate> 
+                                <asp:LinkButton ID="lbkUpdate" runat="server" CausesValidation="True" CommandName="Update" Text="Save"></asp:LinkButton> 
+                                <asp:LinkButton ID="lnkCancel" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel"></asp:LinkButton> 
+                            </EditItemTemplate> 
 							<FooterTemplate>
 								<asp:LinkButton CommandName="Insert" Text="Add" ID="btnAdd" Runat="server" />
 							</FooterTemplate>
 							<ItemTemplate>
+								<asp:LinkButton ID="lnkEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Edit"></asp:LinkButton> 
 								<asp:LinkButton CommandName="Delete" Text="Delete" ID="btnDel" Runat="server" />
 							</ItemTemplate>
 						</asp:TemplateColumn>

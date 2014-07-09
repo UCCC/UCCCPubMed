@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
-using System.Globalization;
 
 public partial class ProgramPublicationStat : System.Web.UI.Page
 {
@@ -142,37 +141,17 @@ public partial class ProgramPublicationStat : System.Web.UI.Page
             return;
         }
 
-        string[] formats = { "M/d/yyyy", "MM/dd/yyyy" };
-        DateTime startdateValue;
-        DateTime enddateValue;
+        int total = GetTotal(txtStartDate.Text, txtEndDate.Text);
+        lblTotal.Text = "Total Publications: " + total.ToString();
+        onePubDiv.Visible = true;
 
-        if (DateTime.TryParseExact(txtStartDate.Text, formats, new CultureInfo("en-US"), DateTimeStyles.None, out startdateValue) && DateTime.TryParseExact(txtEndDate.Text, formats, new CultureInfo("en-US"), DateTimeStyles.None, out enddateValue))
-        {
-            try
-            {
-                int total = GetTotal(txtStartDate.Text, txtEndDate.Text);
-                lblTotal.Text = "Total Publications: " + total.ToString();
-                onePubDiv.Visible = true;
+        GetPublicationStat(txtStartDate.Text, txtEndDate.Text);
 
-                GetPublicationStat(txtStartDate.Text, txtEndDate.Text);
-
-                HttpCookie _dateCookies = new HttpCookie("dates");
-                _dateCookies["startDate"] = txtStartDate.Text;
-                _dateCookies["endDate"] = txtEndDate.Text;
-                _dateCookies.Expires = DateTime.Now.AddDays(5);
-                Response.Cookies.Add(_dateCookies);
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage.Text = ex.Message.ToString();
-                return;
-            }
-        }
-        else
-        {
-            ErrorMessage.Text = "Invalid date.";
-            return;
-        }
+        HttpCookie _dateCookies = new HttpCookie("dates");
+        _dateCookies["startDate"] = txtStartDate.Text;
+        _dateCookies["endDate"] = txtEndDate.Text;
+        _dateCookies.Expires = DateTime.Now.AddDays(5);
+        Response.Cookies.Add(_dateCookies);
 
     }
     protected void gvPublication_RowDataBound(object sender, GridViewRowEventArgs e)

@@ -149,13 +149,6 @@ public partial class l_institution : System.Web.UI.Page
         {
             return;
         }
-        if (txtDescriptionTemp.Text == "" || txtAbbreviationTemp.Text == "")
-        {
-            string msg = "Please give institution name and abbreviation.";
-            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
-            return;
-        }
-
         string sqlStatement =
             "Update l_institution" +
             " SET " +
@@ -267,8 +260,6 @@ public partial class l_institution : System.Web.UI.Page
         //Cache["FISHALKDATASOURCE"] = dsInstitution;
         gvInstitution.DataSource = dsInstitution;
         gvInstitution.DataBind();
-
-        EmptyGridFix(gvInstitution);
     }
     protected void gvInstitution_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -285,13 +276,6 @@ public partial class l_institution : System.Web.UI.Page
             string descriptionStr = txtNewDescriptionTemp.Text;
             TextBox txtNewAbbreviationTemp = (TextBox)gvInstitution.FooterRow.FindControl("txtNewAbbreviation");
             string abbreviationStr = txtNewAbbreviationTemp.Text;
-
-            if (descriptionStr == "" || abbreviationStr == "")
-            {
-                string msg = "Please give institution name and abbreviation.";
-                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
-                return;
-            }
 
             sqlStatement =
                 "select count(*) from l_institution" +

@@ -162,51 +162,6 @@ public class LoadLookup
         }
 
     }
-    public static void LoadInstitution(DropDownList ddl, string institution)
-    {
-        ddl.Items.Clear();
-
-        //string connectionStr = ConfigurationManager.AppSettings.Get("ConnectionString");
-        string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
-        SqlConnection conn = new SqlConnection(connectionStr);
-        string sqlStatement = "";
-        sqlStatement = "select" +
-            " l_institution_id," +
-            " description as institution" +
-            " from l_institution" +
-            " order by institution";
-
-        SqlCommand myCommand = new SqlCommand(sqlStatement, conn);
-        conn.Open();
-        SqlDataReader myReader;
-        myReader = myCommand.ExecuteReader();
-        ddl.Items.Clear();
-        try
-        {
-            while (myReader.Read())
-            {
-                string nameFromDB = myReader["institution"].ToString();
-                string idStr = myReader["l_institution_id"].ToString();
-                ListItem li = new ListItem(nameFromDB, idStr);
-                if (institution == nameFromDB)
-                {
-                    li.Selected = true;
-                }
-                ddl.Items.Add(li);
-            }
-            //ddl.Items.Insert(0, "All institutions");
-
-            //ddl.Items.Insert(0, new ListItem("All institutions", "0"));
-            //ddl.Items.Insert(-1, "--institutions--");
-            ddl.Items.Insert(0, new ListItem("--institution--", "-1"));
-        }
-        finally
-        {
-            myReader.Close();
-            conn.Close();
-        }
-
-    }
     public static void LoadMemberOnProgram(int programId, DropDownList ddlMember)
     {
         ddlMember.Items.Clear();

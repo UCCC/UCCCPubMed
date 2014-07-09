@@ -122,38 +122,6 @@ public partial class l_program : System.Web.UI.Page
         gvProgram.EditIndex = -1;
         FillProgramGrid();
     }
-    protected void gvProgram_RowDeleting(object sender, GridViewDeleteEventArgs e)
-    {
-        string idStr;
-
-        Label lblIdTemp = null;
-        lblIdTemp = (Label)gvProgram.Rows[e.RowIndex].FindControl("lblId");
-        if (lblIdTemp != null)
-        {
-            idStr = lblIdTemp.Text;
-        }
-        else
-        {
-            return;
-        }
-        string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
-        SqlConnection myConnection = new SqlConnection(connectionStr);
-        string sqlStatement;
-
-        sqlStatement =
-                "delete from l_program where l_program_id = " + idStr;
-
-
-        SqlCommand command = new SqlCommand(sqlStatement, myConnection);
-
-        myConnection.Open();
-        command.ExecuteNonQuery();
-        myConnection.Close();
-
-        gvProgram.EditIndex = -1;
-
-        FillProgramGrid();
-    }
     protected void gvProgram_RowUpdating(object sender, GridViewUpdateEventArgs e)
     {
         string idStr;
@@ -181,24 +149,10 @@ public partial class l_program : System.Web.UI.Page
         {
             return;
         }
-        TextBox txtActivatedDateTemp = null;
-        txtActivatedDateTemp = (TextBox)gvProgram.Rows[e.RowIndex].FindControl("txtActivatedDate");
-        if (txtActivatedDateTemp == null)
-        {
-            return;
-        }
-        TextBox txtDeactivatedDateTemp = null;
-        txtDeactivatedDateTemp = (TextBox)gvProgram.Rows[e.RowIndex].FindControl("txtDeactivatedDate");
-        if (txtDeactivatedDateTemp == null)
-        {
-            return;
-        }
         string sqlStatement =
             "Update l_program" +
             " SET program_name=@program_name," +
-            " abbreviation=@abbreviation," +
-            " activated_date=@activated_date," +
-            " deactivated_date=@deactivated_date" +
+            " abbreviation=@abbreviation" +
             " WHERE (l_program_id = @l_program_id)";
 
         //idStr;
@@ -233,32 +187,6 @@ public partial class l_program : System.Web.UI.Page
             abbreviationParameter.Value = DBNull.Value;
         }
         command.Parameters.Add(abbreviationParameter);
-
-        SqlParameter activated_dateParameter = new SqlParameter();
-        activated_dateParameter.ParameterName = "@activated_date";
-        activated_dateParameter.SqlDbType = SqlDbType.SmallDateTime;
-        if (txtActivatedDateTemp.Text != "")
-        {
-            activated_dateParameter.Value = txtActivatedDateTemp.Text;
-        }
-        else
-        {
-            activated_dateParameter.Value = DBNull.Value;
-        }
-        command.Parameters.Add(activated_dateParameter);
-
-        SqlParameter deactivated_dateParameter = new SqlParameter();
-        deactivated_dateParameter.ParameterName = "@deactivated_date";
-        deactivated_dateParameter.SqlDbType = SqlDbType.SmallDateTime;
-        if (txtDeactivatedDateTemp.Text != "")
-        {
-            deactivated_dateParameter.Value = txtDeactivatedDateTemp.Text;
-        }
-        else
-        {
-            deactivated_dateParameter.Value = DBNull.Value;
-        }
-        command.Parameters.Add(deactivated_dateParameter);
 
         SqlParameter l_program_idParameter = new SqlParameter();
         l_program_idParameter.ParameterName = "@l_program_id";
@@ -322,9 +250,7 @@ public partial class l_program : System.Web.UI.Page
         string sqlStatement =
             "select l_program_id," +
             " program_name," +
-            " abbreviation," +
-            " convert(varchar,activated_date, 101) as activated_date," +
-            " convert(varchar,deactivated_date, 101) as deactivated_date" +
+            " abbreviation" +
             " from l_program" +
             " where program_name is not null and program_name <> ''" +
             " order by program_name";
@@ -333,8 +259,6 @@ public partial class l_program : System.Web.UI.Page
         //Cache["FISHALKDATASOURCE"] = dsProgram;
         gvProgram.DataSource = dsProgram;
         gvProgram.DataBind();
-        EmptyGridFix(gvProgram);
-
     }
     protected void gvProgram_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -347,42 +271,10 @@ public partial class l_program : System.Web.UI.Page
 
             string sqlStatement = "";
 
-            TextBox txtNewProgramNameTemp = null;
-            txtNewProgramNameTemp = (TextBox)gvProgram.FooterRow.FindControl("txtNewProgramName");
-            if (txtNewProgramNameTemp == null)
-            {
-                return;
-            }
-            TextBox txtNewAbbreviationTemp = null;
-            txtNewAbbreviationTemp = (TextBox)gvProgram.FooterRow.FindControl("txtNewAbbreviation");
-            if (txtNewAbbreviationTemp == null)
-            {
-                return;
-            }
-            TextBox txtNewActivatedDateTemp = null;
-            txtNewActivatedDateTemp = (TextBox)gvProgram.FooterRow.FindControl("txtNewActivatedDate");
-            if (txtNewActivatedDateTemp == null)
-            {
-                return;
-            }
-            TextBox txtNewDeactivatedDateTemp = null;
-            txtNewDeactivatedDateTemp = (TextBox)gvProgram.FooterRow.FindControl("txtNewDeactivatedDate");
-            if (txtNewDeactivatedDateTemp == null)
-            {
-                return;
-            }
-            
+            TextBox txtNewProgramNameTemp = (TextBox)gvProgram.FooterRow.FindControl("txtNewProgramName");
             string program_nameStr = txtNewProgramNameTemp.Text;
+            TextBox txtNewAbbreviationTemp = (TextBox)gvProgram.FooterRow.FindControl("txtNewAbbreviation");
             string abbreviationStr = txtNewAbbreviationTemp.Text;
-            string activated_dateStr = txtNewActivatedDateTemp.Text;
-            string deactivated_dateStr = txtNewDeactivatedDateTemp.Text;
-
-            if (program_nameStr == "" || abbreviationStr == "")
-            {
-                string msg = "Please give program name/abbreviation.";
-                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
-                return;
-            }
 
             sqlStatement =
                 "select count(*) from l_program" +
@@ -406,8 +298,8 @@ public partial class l_program : System.Web.UI.Page
 
             sqlStatement =
                 " insert into l_program" +
-                " (program_name, abbreviation, activated_date, deactivated_date) values " +
-                "(@program_name, @abbreviation, @activated_date, @deactivated_date)";
+                " (program_name, abbreviation) values " +
+                "(@program_name, @abbreviation)";
 
 
             SqlCommand command = new SqlCommand(sqlStatement, myConnection);
@@ -423,32 +315,6 @@ public partial class l_program : System.Web.UI.Page
             abbreviationParameter.SqlDbType = SqlDbType.VarChar;
             abbreviationParameter.Value = abbreviationStr;
             command.Parameters.Add(abbreviationParameter);
-
-            SqlParameter activated_dateParameter = new SqlParameter();
-            activated_dateParameter.ParameterName = "@activated_date";
-            activated_dateParameter.SqlDbType = SqlDbType.SmallDateTime;
-            if (activated_dateStr != "")
-            {
-                activated_dateParameter.Value = activated_dateStr;
-            }
-            else
-            {
-                activated_dateParameter.Value = DBNull.Value;
-            }
-            command.Parameters.Add(activated_dateParameter);
-
-            SqlParameter deactivated_dateParameter = new SqlParameter();
-            deactivated_dateParameter.ParameterName = "@deactivated_date";
-            deactivated_dateParameter.SqlDbType = SqlDbType.SmallDateTime;
-            if (deactivated_dateStr != "")
-            {
-                deactivated_dateParameter.Value = deactivated_dateStr;
-            }
-            else
-            {
-                deactivated_dateParameter.Value = DBNull.Value;
-            }
-            command.Parameters.Add(deactivated_dateParameter);
 
             SqlParameter l_program_idParameter = new SqlParameter();
             l_program_idParameter.ParameterName = "@l_program_id";

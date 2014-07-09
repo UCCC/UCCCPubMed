@@ -155,7 +155,33 @@ public partial class Member : System.Web.UI.Page
         {
             return;
         }
-        string sqlStatement =
+        string sqlStatement = "";
+
+        string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
+        SqlConnection myConnection = new SqlConnection(connectionStr);
+
+        sqlStatement =
+            "select count(*) from client" +
+            " where last_name = '" +
+            txtLastNameTemp.Text +
+            "' and first_name = '" +
+            txtFirstNameTemp.Text +
+            "'";
+
+        SqlCommand commandCnt2 = new SqlCommand(sqlStatement, myConnection);
+        myConnection.Open();
+        int existingCnt2 = (int)commandCnt2.ExecuteScalar();
+        myConnection.Close();
+
+        if (existingCnt2 > 0)
+        {
+            string msg = "This person is already a member.";
+            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+            return;
+        }
+
+
+        sqlStatement =
             "Update client" +
             " SET last_name=@last_name," +
             " first_name=@first_name," +
@@ -165,8 +191,6 @@ public partial class Member : System.Web.UI.Page
         //idStr;
 
         //string connectionStr = ConfigurationManager.AppSettings.Get("ConnectionString");
-        string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
-        SqlConnection myConnection = new SqlConnection(connectionStr);
         SqlCommand command = new SqlCommand(sqlStatement, myConnection);
 
         SqlParameter last_nameParameter = new SqlParameter();
@@ -294,7 +318,7 @@ public partial class Member : System.Web.UI.Page
             //txtNewDescription.Visible = false;
         }
          * */
-        //EmptyGridFix(gvMember);
+        EmptyGridFix(gvMember);
     }
     protected void gvMember_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -313,6 +337,34 @@ public partial class Member : System.Web.UI.Page
             string first_nameStr = txtNewFirstNameTemp.Text;
             TextBox txtNewMiTemp = (TextBox)gvMember.FooterRow.FindControl("txtNewMi");
             string miStr = txtNewMiTemp.Text;
+
+            if (last_nameStr == "" || first_nameStr == "")
+            {
+                string msg = "Please give last name and first name.";
+                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+                return;
+            }
+
+            sqlStatement =
+                "select count(*) from client" +
+                " where last_name = '" +
+                last_nameStr +
+                "' and first_name = '" +
+                first_nameStr +
+                "'";
+
+            SqlCommand commandCnt2 = new SqlCommand(sqlStatement, myConnection);
+            myConnection.Open();
+            int existingCnt2 = (int)commandCnt2.ExecuteScalar();
+            myConnection.Close();
+
+            if (existingCnt2 > 0)
+            {
+                string msg = "This person is already a member.";
+                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+                return;
+            }
+
 
             sqlStatement =
                 "select count(*) from client" +

@@ -11,7 +11,6 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
-using System.Globalization;
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -146,33 +145,14 @@ public partial class _Default : System.Web.UI.Page
         string startDateStr = txtStartDate.Text;
         string endDateStr = txtEndDate.Text;
 
-        string[] formats = { "M/d/yyyy", "MM/dd/yyyy" };
-        DateTime startdateValue;
-        DateTime enddateValue;
+        GetPublicationStat(startDateStr, endDateStr);
 
-        if (DateTime.TryParseExact(txtStartDate.Text, formats, new CultureInfo("en-US"), DateTimeStyles.None, out startdateValue) && DateTime.TryParseExact(txtEndDate.Text, formats, new CultureInfo("en-US"), DateTimeStyles.None, out enddateValue))
-        {
-            try
-            {
-                GetPublicationStat(startDateStr, endDateStr);
+        HttpCookie _dateCookies = new HttpCookie("dates");
+        _dateCookies["startDate"] = txtStartDate.Text;
+        _dateCookies["endDate"] = txtEndDate.Text;
+        _dateCookies.Expires = DateTime.Now.AddDays(5);
 
-                HttpCookie _dateCookies = new HttpCookie("dates");
-                _dateCookies["startDate"] = txtStartDate.Text;
-                _dateCookies["endDate"] = txtEndDate.Text;
-                _dateCookies.Expires = DateTime.Now.AddDays(5);
-
-                Response.Cookies.Add(_dateCookies);
-            }
-            catch (Exception ex)
-            {
-                //ErrorMessage.Text = ex.Message.ToString();
-                return;
-            }
-        }
-        else
-        {
-            return;
-        }
+        Response.Cookies.Add(_dateCookies);
 
         //Page_Load(sender, e);
     }

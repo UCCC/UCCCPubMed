@@ -14,6 +14,7 @@ public partial class PmidCSVtoReport : System.Web.UI.Page
         {
             txtStartDate.Text = _dateCookies["startDate"];
             txtEndDate.Text = _dateCookies["endDate"];
+            ErrorMessage.Text = _dateCookies["ErrorMessage"];
         }
 
     }
@@ -22,13 +23,23 @@ public partial class PmidCSVtoReport : System.Web.UI.Page
         string startDate = txtStartDate.Text;
         string endDate = txtEndDate.Text;
 
-        fu.SaveAs(Server.MapPath("~/upload/") + fu.FileName);
-        string csv_path = Server.MapPath("~/upload/") + fu.FileName;
-        string csvCoreName = fu.FileName.Substring(0, fu.FileName.Length - 4);
-        Response.Redirect("Report.aspx?csvFile=" + csvCoreName +
-            "&startDate=" + startDate +
-            "&endDate=" + endDate);
-        //List<string> pmidList = new List<string>();
-        //pmidList = ReadCVS(Server.MapPath("~/upload/"), fu.FileName);
+        // check to see is path exists
+        try
+        {
+            fu.SaveAs(Server.MapPath("~/upload/") + fu.FileName);
+            string csv_path = Server.MapPath("~/upload/") + fu.FileName;
+            string csvCoreName = fu.FileName.Substring(0, fu.FileName.Length - 4);
+            Response.Redirect("Report.aspx?csvFile=" + csvCoreName +
+                "&startDate=" + startDate +
+                "&endDate=" + endDate);
+            //List<string> pmidList = new List<string>();
+            //pmidList = ReadCVS(Server.MapPath("~/upload/"), fu.FileName);
+        }
+        catch (Exception ex)
+        {
+            String errormsg = ex.Message.ToString();
+            ErrorMessage.Text = ex.Message.ToString();
+        }
+
     }
 }

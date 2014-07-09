@@ -13,24 +13,68 @@ using System.Web.UI.HtmlControls;
 
 public partial class MemberInstitution : System.Web.UI.Page
 {
-    protected void Page_Load(object sender, EventArgs e)
+    protected void Page_Load(object sender, System.EventArgs e)
     {
         if (!IsPostBack)
         {
-            LoadLookup.LoadMemberOnProgram(0, ddlMember);
+            LoadLookup.LoadMember(ddlMember, "xxx");
+
+            //FillUpGrid();
         }
 
     }
+
+    #region Web Form Designer generated code
+    override protected void OnInit(EventArgs e)
+    {
+        //
+        // CODEGEN: This call is required by the ASP.NET Web Form Designer.
+        //
+        InitializeComponent();
+        base.OnInit(e);
+    }
+
+    /// <summary>
+    /// Required method for Designer support - do not modify
+    /// the contents of this method with the code editor.
+    /// </summary>
+    private void InitializeComponent()
+    {
+    }
+    #endregion
+
     protected bool ValidDdlValue(string labelId, string compareStr)
     {
         string itemTemp;
-        for (int i = 0; i < dgPrimaryInstitution.Items.Count; i++)
+        for (int i = 0; i < myDatagrid.Items.Count; i++)
         {
-            Label lb = (Label)dgPrimaryInstitution.Items[i].FindControl(labelId);
+            Label lb = (Label)myDatagrid.Items[i].FindControl(labelId);
             if (lb != null)
             {
                 itemTemp = lb.Text;
                 if (itemTemp == compareStr)
+                {
+                    return false;
+
+                }
+            }
+
+        }
+        return true;
+    }
+    protected bool ValidPrimary(string labelId, string labelEndDate)
+    {
+        string itemTemp;
+        string tempEndDate;
+        for (int i = 0; i < myDatagrid.Items.Count; i++)
+        {
+            Label lb = (Label)myDatagrid.Items[i].FindControl(labelId);
+            Label endDate = (Label)myDatagrid.Items[i].FindControl(labelEndDate);
+            if (lb != null)
+            {
+                itemTemp = lb.Text;
+                tempEndDate = endDate.Text;
+                if (itemTemp == "Yes" && tempEndDate == "")
                 {
                     return false;
 
@@ -45,9 +89,8 @@ public partial class MemberInstitution : System.Web.UI.Page
         string sqlStatement =
             " SELECT" +
             " l_institution_id," +
-            " rtrim(description) as institution" +
-            " FROM l_institution" +
-            " order by description";
+            " description as institution" +
+            " FROM l_institution";
 
         string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
         SqlConnection myConnection = new SqlConnection(connectionStr);
@@ -78,6 +121,7 @@ public partial class MemberInstitution : System.Web.UI.Page
             myConnection.Close();
         }
     }
+
     protected void LoadYesNo(DropDownList ddl, string selected)
     {
         string sqlStatement =
@@ -116,22 +160,21 @@ public partial class MemberInstitution : System.Web.UI.Page
         }
     }
 
-
-    protected void dgPrimaryInstitution_OnEditCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
+    protected void myDatagrid_OnEditCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
     {
-        dgPrimaryInstitution.EditItemIndex = e.Item.ItemIndex;
-        FillUpDgPrimaryInstitution();
-        dgPrimaryInstitution.ShowFooter = false;
+        myDatagrid.EditItemIndex = e.Item.ItemIndex;
+        FillUpGrid();
+        myDatagrid.ShowFooter = false;
     }
-    protected void dgPrimaryInstitution_CancelCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
+    protected void myDatagrid_CancelCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
     {
-        dgPrimaryInstitution.EditItemIndex = -1;
-        FillUpDgPrimaryInstitution();
-        dgPrimaryInstitution.ShowFooter = true;
+        myDatagrid.EditItemIndex = -1;
+        FillUpGrid();
+        myDatagrid.ShowFooter = true;
     }
-    protected void dgPrimaryInstitution_DeleteCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
+    protected void myDatagrid_DeleteCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
     {
-        //int clientProgramId = (int)dgPrimaryInstitution.DataKeys[(int)e.Item.ItemIndex];
+        //int clientProgramId = (int)myDatagrid.DataKeys[(int)e.Item.ItemIndex];
         string controlIdStr = e.Item.Cells[0].Text;
         string sqlStatement =
             " delete from client_institution" +
@@ -151,11 +194,11 @@ public partial class MemberInstitution : System.Web.UI.Page
             myConnection.Close();
         }
 
-        dgPrimaryInstitution.EditItemIndex = -1;
-        FillUpDgPrimaryInstitution();
-        dgPrimaryInstitution.ShowFooter = true;
+        myDatagrid.EditItemIndex = -1;
+        FillUpGrid();
+        myDatagrid.ShowFooter = true;
     }
-    protected void dgPrimaryInstitution_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
+    protected void myDatagrid_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
     {
         if (e.Item.ItemType == ListItemType.EditItem)
         {
@@ -190,7 +233,7 @@ public partial class MemberInstitution : System.Web.UI.Page
 
         }
     }
-    protected void dgPrimaryInstitution_UpdateCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
+    protected void myDatagrid_UpdateCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
     {
         string controlIdStr = e.Item.Cells[0].Text;
 
@@ -201,6 +244,29 @@ public partial class MemberInstitution : System.Web.UI.Page
         if (!isValidDdlValue)
         {
             string msg = "Cannot duplicate institution.";
+            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+            return;
+        }
+        if (ddl.SelectedIndex == 0 || ddl.SelectedIndex == -1)
+        {
+            string msg = "Select institution.";
+            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+            return;
+        }
+
+        DropDownList ddl2 = (DropDownList)(e.Item.FindControl("ddlYesNo"));
+        string dllIdStr2 = ddl2.SelectedValue;
+        string ddlNameStr2 = ddl2.SelectedItem.ToString();
+        bool isValidDdlValue2 = ValidDdlValue("lblOrigYesNo", ddlNameStr2);
+        if (!isValidDdlValue2 && ddlNameStr2 == "Yes")
+        {
+            string msg = "Cannot duplicate primary institution.";
+            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+            return;
+        }
+        if (ddl2.SelectedIndex == 0 || ddl2.SelectedIndex == -1)
+        {
+            string msg = "Select primary (Yes/No).";
             ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
             return;
         }
@@ -228,16 +294,16 @@ public partial class MemberInstitution : System.Web.UI.Page
         TextBox txtTempNote = (TextBox)(e.Item.FindControl("txtNote"));
         string noteStr = txtTempNote.Text;
 
-        UpdateClientPrimaryInstitution(controlIdStr, dllIdStr, startDateStr, endDateStr, noteStr);
-        dgPrimaryInstitution.EditItemIndex = -1;
-        FillUpDgPrimaryInstitution();
-        dgPrimaryInstitution.ShowFooter = true;
+        UpdateClientTypeVote(controlIdStr, dllIdStr, dllIdStr2, startDateStr, endDateStr, noteStr);
+        myDatagrid.EditItemIndex = -1;
+        FillUpGrid();
+        myDatagrid.ShowFooter = true;
     }
 
-    protected void FillUpDgPrimaryInstitution()
+    protected void FillUpGrid()
     {
         string passedClientIdStr = ddlMember.SelectedValue.ToString();
-        int clientIdInt = System.Convert.ToInt32(passedClientIdStr);
+        int clientIdInt = Convert.ToInt32(ddlMember.SelectedValue);
 
         string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
         SqlConnection conn = new SqlConnection(connectionStr);
@@ -247,7 +313,7 @@ public partial class MemberInstitution : System.Web.UI.Page
         sqlStatement =
             " select cp.client_institution_id," +
             " cp.client_id," +
-            " rtrim(ld.description) as institution," +
+            " ld.description as institution," +
             " lynu.description as yes_no," +
             " convert(varchar,cp.start_date,101) as start_date," +
             " convert(varchar,cp.end_date,101) as end_date," +
@@ -261,7 +327,6 @@ public partial class MemberInstitution : System.Web.UI.Page
             " inner join l_yes_no lynu" +
             " on cp.primary_institution = lynu.l_yes_no_id" +
             " where cp.client_id = @CLIENTID" +
-            " and cp.primary_institution = 1" +
             " order by cp.client_institution_id";
 
         SqlCommand command = new SqlCommand(sqlStatement, conn);
@@ -284,18 +349,18 @@ public partial class MemberInstitution : System.Web.UI.Page
             lblNameLbl.Text = "Member: ";
             lblName.Text = dataSet1.Tables["Table"].Rows[0]["full_name"].ToString();
         }
-        dgPrimaryInstitution.DataSource = dataSet1.Tables["Table"].DefaultView;
-        dgPrimaryInstitution.DataBind();
+        myDatagrid.DataSource = dataSet1.Tables["Table"].DefaultView;
+        myDatagrid.DataBind();
     }
 
-    protected void UpdateClientPrimaryInstitution(string controlIdStr, string dllIdStr, string startDateStr, string endDateStr, string noteStr)
+    protected void UpdateClientTypeVote(string controlIdStr, string dllIdStr, string dllIdStr2, string startDateStr, string endDateStr, string noteStr)
     {
         string sqlStatement =
             " update client_institution" +
             " set l_institution_id = " +
             dllIdStr +
-            //", primary_institution = " +
-            //dllIdStr2 +
+            ", primary_institution = " +
+            dllIdStr2 +
             ", start_date = " +
             startDateStr +
             ", end_date = " +
@@ -303,8 +368,7 @@ public partial class MemberInstitution : System.Web.UI.Page
             ", note = '" +
             noteStr +
             "'  where client_institution_id = " +
-            controlIdStr +
-            " and primary_institution = 1";
+            controlIdStr;
 
         string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
         SqlConnection myConnection = new SqlConnection(connectionStr);
@@ -318,7 +382,7 @@ public partial class MemberInstitution : System.Web.UI.Page
         {
             myConnection.Close();
         }
-        FillUpDgPrimaryInstitution();
+        FillUpGrid();
 
     }
 
@@ -361,7 +425,7 @@ public partial class MemberInstitution : System.Web.UI.Page
             DropDownList ddl2 = (DropDownList)(e.Item.FindControl("ddlAddNewYesNo"));
             if (ddl.SelectedIndex == 0 || ddl2.SelectedIndex == 0)
             {
-                string msg = "Please select an institution and specify primary.";
+                string msg = "Please select a institution and specify primary.";
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
                 return;
             }
@@ -372,27 +436,38 @@ public partial class MemberInstitution : System.Web.UI.Page
             string ddlIdStr2 = ddl2.SelectedValue.ToString();
 
             string ddlNameStr = ddl.SelectedItem.ToString();
-            bool isValidDdlValue = ValidDdlValue("lblOrigInstitution", ddlNameStr);
-            if (!isValidDdlValue)
+            bool isValidInstitutionDdlValue = ValidDdlValue("lblOrigInstitution", ddlNameStr);
+            if (!isValidInstitutionDdlValue)
             {
                 string msg = "Cannot duplicate institution.";
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
                 return;
             }
             string ddlNameStr2 = ddl2.SelectedItem.ToString();
-            bool isValidDdlValue2 = ValidDdlValue("lblOrigYesNoUnknown", ddlNameStr2);
+            if (ddlIdStr2 == "1")
+            {
+                bool isValidPrimary = ValidPrimary("lblOrigYesNo", "lblOrigEndDate");
+                if (!isValidPrimary)
+                {
+                    string msg = "Cannot duplicate current primary institution.";
+                    ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+                    return;
+                }
+            }
+            /*
+            bool isValidDdlValue2 = ValidDdlValue("lblOrigYesNo", ddlNameStr2);
             if (!isValidDdlValue2 && ddlNameStr2 == "Yes")
             {
-                string msg = "Cannot duplicate primary institution.";
-                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+                ClientManagement.CMControl.WebMsgBox.Show("Cannot duplicate primary institution.");
                 return;
             }
+            */
 
             string sqlStatement =
                 " insert into client_institution" +
                 " (client_id, l_institution_id, primary_institution, start_date, end_date, note)" +
                 " values(" +
-                passedClientIdStr +
+                ddlMember.SelectedValue.ToString() +
                 ", " +
                 ddlIdStr +
                 ", " +
@@ -417,14 +492,14 @@ public partial class MemberInstitution : System.Web.UI.Page
             {
                 myConnection.Close();
             }
-            dgPrimaryInstitution.EditItemIndex = -1;
-            FillUpDgPrimaryInstitution();
-            dgPrimaryInstitution.ShowFooter = true;
+            myDatagrid.EditItemIndex = -1;
+            FillUpGrid();
+            myDatagrid.ShowFooter = true;
 
         }
     }
     protected void ddlMember_SelectedIndexChanged(object sender, EventArgs e)
     {
-        FillUpDgPrimaryInstitution();
+        FillUpGrid();
     }
 }

@@ -381,44 +381,12 @@ public partial class programLeader : System.Web.UI.Page
             {
                 return;
             }
-            if (ddlNewProgramTemp.SelectedValue == "-1")
-            {
-                ErrorMessage.Text = "Select a program.";
-                return;
-            }
-
             DropDownList ddlNewMemberTemp = null;
             ddlNewMemberTemp = (DropDownList)gvProgramLeader.FooterRow.FindControl("ddlNewMember");
             if (ddlNewMemberTemp == null)
             {
                 return;
             }
-            if (ddlNewMemberTemp.SelectedValue == "--member--")
-            {
-                ErrorMessage.Text = "Select a member.";
-                return;
-            }
-
-
-            sqlStatement =
-                "select count(*) from program_leader" +
-                " where l_program_id = " +
-                ddlNewProgramTemp.SelectedValue.ToString() +
-                " and client_id = " +
-                ddlNewMemberTemp.SelectedValue.ToString();
-
-            SqlCommand commandCnt2 = new SqlCommand(sqlStatement, myConnection);
-            myConnection.Open();
-            int existingCnt2 = (int)commandCnt2.ExecuteScalar();
-            myConnection.Close();
-
-            if (existingCnt2 > 0)
-            {
-                string msg = "This member is already the leader of program.";
-                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
-                return;
-            }
-
 
             sqlStatement =
                 "select count(*) from program_leader" +

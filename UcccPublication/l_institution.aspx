@@ -6,7 +6,7 @@
             <div class="fullblock" id="inventoryDiv" runat="server">
                 <div class="inventorycrumbs">
                 <font color="maroon" size="2" style="font-weight:bold">
-                    Member<br /><br />
+                    Institution<br /><br />
                 </font>
     <table>
         <tr>

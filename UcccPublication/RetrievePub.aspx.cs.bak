@@ -20,16 +20,6 @@ public partial class RetrievePub : System.Web.UI.Page
         public string Initials;
         public string Suffix;
     }
-
-    public struct getResult
-    {
-        public string Program;
-        public string Member;
-        public int NumberPublications;
-        public bool Import;
-        public int NumImported;
-    }
-
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -62,18 +52,6 @@ public partial class RetrievePub : System.Web.UI.Page
                 int pmid = Convert.ToInt32(pmidObj);
                 GetAndInsertAllInfoForOnePmid(pmid, true);
             }
-
-            DataTable dtResults = new DataTable();
-            dtResults.Columns.Add(new DataColumn("Program", typeof(string)));
-            dtResults.Columns.Add(new DataColumn("Member", typeof(string)));
-            dtResults.Columns.Add(new DataColumn("NoOfPub", typeof(int)));
-            dtResults.Columns.Add(new DataColumn("NoImport", typeof(int)));
-
-            Session["RESULTTABLE"] = dtResults;
-
-            btnGetPubAll.Attributes.Add("onclick", "hourglass();");
-            btnGetPubByProgram.Attributes.Add("onclick", "hourglass();");
-            btnGetPubByMember.Attributes.Add("onclick", "hourglass();");
 
         }
     }
@@ -115,57 +93,25 @@ public partial class RetrievePub : System.Web.UI.Page
         string clientPlusSign = firstName + "+" + LastName;
         hdnClientWithPlusSign.Value = clientPlusSign;
 
-        SavePublog("Getting Publications for " + hdnClientWithPlusSign.Value.ToString() + " member", DateTime.Now, "btnGetPubByMember");
-
         GetAndInsertPubForOneMember(clientPlusSign);
 
         string msg = hdnPubCnt.Value + " publications imported.";
         //ErrorMessage.Text = msg;
         ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
         hdnPubCnt.Value = "0";
-
-        DataTable dt = (DataTable)Session["RESULTTABLE"];
-        gvResults.Visible = true;
-        gvResults.DataSource = dt;
-        gvResults.DataBind();
-
-        dt.Clear();
-        Session["RESULTTABLE"] = dt;
     }
-    protected void GetAndInsertPubForOneMember(string clientPlusSign, int programid = -1)
+    protected void GetAndInsertPubForOneMember(string clientPlusSign)
     {
         List<int> pmidListFromPubMed = GetPmidListForOneMemberFromPubMed(clientPlusSign);
-
         List<int> pmidListFromDb = GetPmidListForOneMemberInDb(clientPlusSign);
         List<int> pmidRejectFromDb = GetPmidListFromReject().ToList();
-
-        // logs and add record to result table
-        //SavePublog(clientPlusSign, DateTime.Now, "GetAndInsertPubForOneMember");
-        SavePublog("Getting " + pmidListFromPubMed.Count.ToString() + " publications for " + clientPlusSign, DateTime.Now, "InsertPubForOneProgram");
-
-        int no_imported = 0;
         foreach (int pmid in pmidListFromPubMed)
         {
             if (!pmidListFromDb.Contains(pmid) && !pmidRejectFromDb.Contains(pmid))
             {
-                if (GetAndInsertAllInfoForOnePmid(pmid, false) > 0)
-                {
-                    no_imported++;
-                }
+                GetAndInsertAllInfoForOnePmid(pmid,false);
             }
         }
-
-        // hdnPubCnt
-
-        DataTable dtResults = (DataTable)Session["RESULTTABLE"];
-        DataRow dr = dtResults.NewRow();
-        dr["Program"] = programid.ToString();
-        dr["Member"] = clientPlusSign;
-        dr["NoOfPub"] = pmidListFromPubMed.Count.ToString();
-        dr["NoImport"] = no_imported;
-        dtResults.Rows.Add(dr);
-        Session["RESULTTABLE"] = dtResults;
-
     }
     protected List<int> GetPmidListForOneMemberInDb(string clientWithPlusSign)
     {
@@ -201,18 +147,10 @@ public partial class RetrievePub : System.Web.UI.Page
         conn.Open();
         SqlDataReader myReader;
         myReader = myCommand.ExecuteReader();
-
-        try 
+        try
         {
-            while (myReader.Read())
-            {
-                if(myReader["pmid"].ToString() != "")
-                {
-                    pmidIdList.Add((int) myReader["pmid"]);
-                }
-            }
-
-            //pmidIdList = (from IDataRecord record in myReader select (int)record["pmid"]).ToList();
+            pmidIdList = (from IDataRecord record in myReader
+                                       select (int)record["pmid"]).ToList();
         }
         finally
         {
@@ -231,7 +169,7 @@ public partial class RetrievePub : System.Web.UI.Page
         }
         else if (pubMax == "All")
         {
-            url = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" + clientWithPlusSign + @"[au]" + "&retmax=10000&usehistory=y";
+            url = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" + clientWithPlusSign + @"[au]" + "&retmax=5000&usehistory=y";
         }
         else
         {
@@ -287,7 +225,7 @@ public partial class RetrievePub : System.Web.UI.Page
     {
 
         int programId = Convert.ToInt32(ddlProgram.SelectedValue);
-        SavePublog(ddlProgram.SelectedItem.ToString(), DateTime.Now, "GetPubByProgram");
+        SavePublog(ddlProgram.SelectedItem.ToString(), DateTime.Now);
 
         InsertPubForOneProgram(programId);
 
@@ -316,15 +254,11 @@ public partial class RetrievePub : System.Web.UI.Page
     protected void InsertPubForOneProgram(int programId)
     {
         List<string> nameList = GetNamePlusSignListForOneProgram(programId);
-
-        SavePublog("Getting Publications for " + nameList.Count.ToString() + " members", DateTime.Now, "InsertPubForOneProgram");
-
         foreach (string clientWithPlusSign in nameList)
         {
-            SavePublog("Getting Publications for " + clientWithPlusSign, DateTime.Now, "InsertPubForOneProgram");
-
+            SavePublog(clientWithPlusSign, DateTime.Now);
             hdnClientWithPlusSign.Value = clientWithPlusSign;
-            GetAndInsertPubForOneMember(clientWithPlusSign, programId);
+            GetAndInsertPubForOneMember(clientWithPlusSign);
         }
     }
     protected void InsertPubForStartLetter(string startLetter)
@@ -332,7 +266,7 @@ public partial class RetrievePub : System.Web.UI.Page
         List<string> nameList = GetNamePlusSignListForStartLetter(startLetter);
         foreach (string clientWithPlusSign in nameList)
         {
-            SavePublog(clientWithPlusSign, DateTime.Now, "InsertPubForStartLetter");
+            SavePublog(clientWithPlusSign, DateTime.Now);
             hdnClientWithPlusSign.Value = clientWithPlusSign;
             GetAndInsertPubForOneMember(clientWithPlusSign);
         }
@@ -357,12 +291,6 @@ public partial class RetrievePub : System.Web.UI.Page
         {
             List<int> programIdList = (from IDataRecord record in myReader
                                        select (int)record["l_program_id"]).ToList();
-
-            // log getting programs 
-            SavePublog("Getting Publications for " + programIdList.Count.ToString() + " program", DateTime.Now, "btnGetPubAll");
-
-            // Testing of one program
-            // InsertPubForOneProgram(programIdList[5]);
             foreach (int programId in programIdList)
             {
                 InsertPubForOneProgram(programId);
@@ -377,14 +305,6 @@ public partial class RetrievePub : System.Web.UI.Page
         //ErrorMessage.Text = msg;
         ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
         hdnPubCnt.Value = "0";
-
-        DataTable dtResults = (DataTable)Session["RESULTTABLE"];
-        gvResults.Visible = true;
-        gvResults.DataSource = dtResults;
-        gvResults.DataBind();
-
-        dtResults.Clear();
-        Session["RESULTTABLE"] = dtResults;
     }
     protected List<string> GetNamePlusSignListForOneProgram(int programId)
     {
@@ -523,372 +443,362 @@ public partial class RetrievePub : System.Web.UI.Page
         pubmedMonthStr = "";
         pubmedDayStr = "";
         CollectiveNameStr = "";
-
+        
+        xmlReader.Read();
         bool isBook = false;
-
-        try
+        while (!xmlReader.EOF) //load loop       
         {
-            xmlReader.Read();
-            while (!xmlReader.EOF) //load loop       
+            while (xmlReader.Name != "Article" || !xmlReader.IsStartElement())
             {
-                while (xmlReader.Name != "Article" || !xmlReader.IsStartElement())
+                xmlReader.Read();
+                if (xmlReader.Name == "PubmedBookArticle")
                 {
-                    xmlReader.Read();
-                    if (xmlReader.Name == "PubmedBookArticle")
-                    {
-                        isBook = true;
-                        break;
-                    }
-                }
-                if (isBook)
-                {
+                    isBook = true;
                     break;
                 }
-                while (xmlReader.Name != "Journal" || !xmlReader.IsStartElement())
+            }
+            if (isBook)
+            {
+                break;
+            }
+            while (xmlReader.Name != "Journal" || !xmlReader.IsStartElement())
+            {
+                xmlReader.Read();
+            }
+            while ((xmlReader.Name != "ISSN" && xmlReader.Name != "Title"
+                && xmlReader.Name != "ISOAbbreviation" && xmlReader.Name != "JournalIssue") || !xmlReader.IsStartElement())
+            {
+                xmlReader.Read();
+                if (xmlReader.Name == "ISSN")
                 {
-                    xmlReader.Read();
+                    IssnTypeStr = xmlReader.GetAttribute("IssnType");
+                    issnStr = xmlReader.ReadElementString("ISSN");
+                    continue;
                 }
-                while ((xmlReader.Name != "ISSN" && xmlReader.Name != "Title"
-                    && xmlReader.Name != "ISOAbbreviation" && xmlReader.Name != "JournalIssue") || !xmlReader.IsStartElement())
+                if (xmlReader.Name == "JournalIssue")
                 {
                     xmlReader.Read();
-                    if (xmlReader.Name == "ISSN")
-                    {
-                        IssnTypeStr = xmlReader.GetAttribute("IssnType");
-                        issnStr = xmlReader.ReadElementString("ISSN");
-                        continue;
-                    }
-                    if (xmlReader.Name == "JournalIssue")
+                    while ((xmlReader.Name != "Volume" && xmlReader.Name != "Issue"
+                        && xmlReader.Name != "PubDate") || !xmlReader.IsStartElement())
                     {
                         xmlReader.Read();
-                        while ((xmlReader.Name != "Volume" && xmlReader.Name != "Issue"
-                            && xmlReader.Name != "PubDate") || !xmlReader.IsStartElement())
+                        if (xmlReader.Name == "PubDate" && xmlReader.IsStartElement())
                         {
                             xmlReader.Read();
-                            if (xmlReader.Name == "PubDate" && xmlReader.IsStartElement())
-                            {
-                                xmlReader.Read();
-                                while ((xmlReader.Name != "Year" && xmlReader.Name != "Season" && xmlReader.Name != "Month"
-                                    && xmlReader.Name != "Day" && xmlReader.Name != "MedlineDate") || !xmlReader.IsStartElement())
-                                {
-                                    xmlReader.Read();
-                                    if (xmlReader.Name == "Year" && xmlReader.IsStartElement())
-                                    {
-                                        YearStr = xmlReader.ReadElementString("Year");
-                                        continue;
-                                    }
-                                    if (xmlReader.Name == "Season" && xmlReader.IsStartElement())
-                                    {
-                                        SeasonStr = xmlReader.ReadElementString("Season");
-                                        continue;
-                                    }
-                                    if (xmlReader.Name == "Month" && xmlReader.IsStartElement())
-                                    {
-                                        MonthStr = xmlReader.ReadElementString("Month");
-                                        continue;
-                                    }
-                                    if (xmlReader.Name == "Day" && xmlReader.IsStartElement())
-                                    {
-                                        DayStr = xmlReader.ReadElementString("Day");
-                                        continue;
-                                    }
-                                    if (xmlReader.Name == "MedlineDate" && xmlReader.IsStartElement())
-                                    {
-                                        MedlineDateStr = xmlReader.ReadElementString("MedlineDate");
-                                        continue;
-                                    }
-                                    if (xmlReader.Name == "PubDate" && xmlReader.NodeType == XmlNodeType.EndElement)
-                                    {
-                                        xmlReader.Read();
-                                        break;
-                                    }
-                                }
-                            }
-                            if (xmlReader.Name == "Volume")
-                            {
-                                VolumeStr = xmlReader.ReadElementString("Volume");
-                                continue;
-                            }
-                            if (xmlReader.Name == "Issue")
-                            {
-                                IssueStr = xmlReader.ReadElementString("Issue");
-                                continue;
-                            }
-                            if (xmlReader.Name == "JournalIssue" && xmlReader.NodeType == XmlNodeType.EndElement)
-                            {
-                                xmlReader.Read();
-                                break;
-                            }
-                        }
-                        continue;
-                    }
-                    if (xmlReader.Name == "Title")
-                    {
-                        journalTitleStr = xmlReader.ReadElementString("Title");
-                        continue;
-                    }
-                    if (xmlReader.Name == "ISOAbbreviation")
-                    {
-                        ISOAbbreviationStr = xmlReader.ReadElementString("ISOAbbreviation");
-                        continue;
-                    }
-                    if (xmlReader.Name == "Journal" && xmlReader.NodeType == XmlNodeType.EndElement)
-                    {
-                        xmlReader.Read();
-                        break;
-                    }
-                }
-                while ((xmlReader.Name != "ArticleTitle" && xmlReader.Name != "MedlinePgn" &&
-                    xmlReader.Name != "AbstractText" && xmlReader.Name != "AuthorList" &&
-                    xmlReader.Name != "PublicationTypeList" &&
-                    xmlReader.Name != "ArticleDate") || !xmlReader.IsStartElement())
-                {
-                    xmlReader.Read();
-                    if (xmlReader.Name == "ArticleTitle" && xmlReader.IsStartElement())
-                    {
-                        ArticleTitleStr = xmlReader.ReadElementString("ArticleTitle");
-                        continue;
-                    }
-                    if (xmlReader.Name == "MedlinePgn" && xmlReader.IsStartElement())
-                    {
-                        MedlinePgnStr = xmlReader.ReadElementString("MedlinePgn");
-                        continue;
-                    }
-                    if (xmlReader.Name == "AbstractText" && xmlReader.IsStartElement())
-                    {
-                        AbstractTextStr = xmlReader.ReadElementString("AbstractText");
-                        continue;
-                    }
-                    if (xmlReader.Name == "Article" && xmlReader.NodeType == XmlNodeType.EndElement)
-                    {
-                        xmlReader.Read();
-                        break;
-                    }
-                    if (xmlReader.Name == "AuthorList" && xmlReader.IsStartElement())
-                    {
-                        author at = new author();
-                        while (xmlReader.Read())
-                        {
-                            if (xmlReader.IsStartElement())
-                            {
-                                switch (xmlReader.Name)
-                                {
-                                    case "Author":
-                                        break;
-                                    case "LastName":
-                                        at.LastName = xmlReader.ReadString();
-                                        break;
-                                    case "ForeName":
-                                        at.ForeName = xmlReader.ReadString();
-                                        break;
-                                    case "Initials":
-                                        at.Initials = xmlReader.ReadString();
-                                        authorList.Add(at);
-                                        break;
-                                    case "Suffix":
-                                        string Suffix = xmlReader.ReadString();
-                                        author a = authorList[authorList.Count - 1];
-                                        a.Suffix = Suffix;
-                                        authorList[authorList.Count - 1] = a;
-                                        break;
-                                    case "CollectiveName":
-                                        CollectiveNameStr = xmlReader.ReadString();
-                                        break;
-                                }
-                            }
-                            if (xmlReader.Name == "AuthorList" && xmlReader.NodeType == XmlNodeType.EndElement)
-                            {
-                                break;
-                            }
-                        }
-                        continue;
-                    }
-                    if (xmlReader.Name == "PublicationTypeList" && xmlReader.IsStartElement())
-                    {
-                        string pubtype;
-                        while (xmlReader.Read())
-                        {
-                            if (xmlReader.IsStartElement())
-                            {
-                                switch (xmlReader.Name)
-                                {
-                                    case "PublicationType":
-                                        pubtype = xmlReader.ReadString();
-                                        pubtypeList.Add(pubtype);
-                                        break;
-                                }
-                            }
-                            if (xmlReader.Name == "PublicationTypeList" && xmlReader.NodeType == XmlNodeType.EndElement)
-                            {
-                                break;
-                            }
-                        }
-                        continue;
-                    }
-                    if (xmlReader.Name == "ArticleDate" && xmlReader.IsStartElement())
-                    {
-                        string articleEStr = xmlReader.GetAttribute("DateType");
-                        if (articleEStr == "Electronic")
-                        {
-                            xmlReader.Read();
-                            while ((xmlReader.Name != "Year" && xmlReader.Name != "Month"
-                                && xmlReader.Name != "Day") || !xmlReader.IsStartElement())
+                            while ((xmlReader.Name != "Year" && xmlReader.Name != "Season" && xmlReader.Name != "Month"
+                                && xmlReader.Name != "Day" && xmlReader.Name != "MedlineDate") || !xmlReader.IsStartElement())
                             {
                                 xmlReader.Read();
                                 if (xmlReader.Name == "Year" && xmlReader.IsStartElement())
                                 {
-                                    articleEYearStr = xmlReader.ReadElementString("Year");
+                                    YearStr = xmlReader.ReadElementString("Year");
+                                    continue;
+                                }
+                                if (xmlReader.Name == "Season" && xmlReader.IsStartElement())
+                                {
+                                    SeasonStr = xmlReader.ReadElementString("Season");
                                     continue;
                                 }
                                 if (xmlReader.Name == "Month" && xmlReader.IsStartElement())
                                 {
-                                    articleEMonthStr = xmlReader.ReadElementString("Month");
+                                    MonthStr = xmlReader.ReadElementString("Month");
                                     continue;
                                 }
                                 if (xmlReader.Name == "Day" && xmlReader.IsStartElement())
                                 {
-                                    articleEDayStr = xmlReader.ReadElementString("Day");
+                                    DayStr = xmlReader.ReadElementString("Day");
                                     continue;
                                 }
-                                if (xmlReader.Name == "ArticleDate" && xmlReader.NodeType == XmlNodeType.EndElement)
+                                if (xmlReader.Name == "MedlineDate" && xmlReader.IsStartElement())
+                                {
+                                    MedlineDateStr = xmlReader.ReadElementString("MedlineDate");
+                                    continue;
+                                }
+                                if (xmlReader.Name == "PubDate" && xmlReader.NodeType == XmlNodeType.EndElement)
                                 {
                                     xmlReader.Read();
                                     break;
                                 }
                             }
-
+                        }
+                        if (xmlReader.Name == "Volume")
+                        {
+                            VolumeStr = xmlReader.ReadElementString("Volume");
+                            continue;
+                        }
+                        if (xmlReader.Name == "Issue")
+                        {
+                            IssueStr = xmlReader.ReadElementString("Issue");
+                            continue;
+                        }
+                        if (xmlReader.Name == "JournalIssue" && xmlReader.NodeType == XmlNodeType.EndElement)
+                        {
+                            xmlReader.Read();
+                            break;
                         }
                     }
+                    continue;
                 }
-                while (xmlReader.Name != "History" || !xmlReader.IsStartElement())
+                if (xmlReader.Name == "Title")
+                {
+                    journalTitleStr = xmlReader.ReadElementString("Title");
+                    continue;
+                }
+                if (xmlReader.Name == "ISOAbbreviation")
+                {
+                    ISOAbbreviationStr = xmlReader.ReadElementString("ISOAbbreviation");
+                    continue;
+                }
+                if (xmlReader.Name == "Journal" && xmlReader.NodeType == XmlNodeType.EndElement)
                 {
                     xmlReader.Read();
-                    if (xmlReader.Name == "History" && xmlReader.IsStartElement())
+                    break;
+                }
+            }
+            while ((xmlReader.Name != "ArticleTitle" && xmlReader.Name != "MedlinePgn" &&
+                xmlReader.Name != "AbstractText" && xmlReader.Name != "AuthorList" &&
+                xmlReader.Name != "PublicationTypeList" &&
+                xmlReader.Name != "ArticleDate") || !xmlReader.IsStartElement())
+            {
+                xmlReader.Read();
+                if (xmlReader.Name == "ArticleTitle" && xmlReader.IsStartElement())
+                {
+                    ArticleTitleStr = xmlReader.ReadElementString("ArticleTitle");
+                    continue;
+                }
+                if (xmlReader.Name == "MedlinePgn" && xmlReader.IsStartElement())
+                {
+                    MedlinePgnStr = xmlReader.ReadElementString("MedlinePgn");
+                    continue;
+                }
+                if (xmlReader.Name == "AbstractText" && xmlReader.IsStartElement())
+                {
+                    AbstractTextStr = xmlReader.ReadElementString("AbstractText");
+                    continue;
+                }
+                if (xmlReader.Name == "Article" && xmlReader.NodeType == XmlNodeType.EndElement)
+                {
+                    xmlReader.Read();
+                    break;
+                }
+                if (xmlReader.Name == "AuthorList" && xmlReader.IsStartElement())
+                {
+                    author at = new author();
+                    while (xmlReader.Read())
                     {
-                        while (xmlReader.Read())
+                        if (xmlReader.IsStartElement())
                         {
-                            if (xmlReader.IsStartElement())
+                            switch (xmlReader.Name)
                             {
-                                string statusStr = xmlReader.GetAttribute("PubStatus");
-                                if (statusStr == "entrez")
+                                case "Author":
+                                    break;
+                                case "LastName":
+                                    at.LastName = xmlReader.ReadString();
+                                    break;
+                                case "ForeName":
+                                    at.ForeName = xmlReader.ReadString();
+                                    break;
+                                case "Initials":
+                                    at.Initials = xmlReader.ReadString();
+                                    authorList.Add(at);
+                                    break;
+                                case "Suffix":
+                                    string Suffix = xmlReader.ReadString();
+                                    author a = authorList[authorList.Count - 1];
+                                    a.Suffix = Suffix;
+                                    authorList[authorList.Count - 1] = a;
+                                    break;
+                                case "CollectiveName":
+                                    CollectiveNameStr = xmlReader.ReadString();
+                                    break;
+                            }
+                        }
+                        if (xmlReader.Name == "AuthorList" && xmlReader.NodeType == XmlNodeType.EndElement)
+                        {
+                            break;
+                        }
+                    }
+                    continue;
+                }
+                if (xmlReader.Name == "PublicationTypeList" && xmlReader.IsStartElement())
+                {
+                    string pubtype;
+                    while (xmlReader.Read())
+                    {
+                        if (xmlReader.IsStartElement())
+                        {
+                            switch (xmlReader.Name)
+                            {
+                                case "PublicationType":
+                                    pubtype = xmlReader.ReadString();
+                                    pubtypeList.Add(pubtype);
+                                    break;
+                            }
+                        }
+                        if (xmlReader.Name == "PublicationTypeList" && xmlReader.NodeType == XmlNodeType.EndElement)
+                        {
+                            break;
+                        }
+                    }
+                    continue;
+                }
+                if (xmlReader.Name == "ArticleDate" && xmlReader.IsStartElement())
+                {
+                    string articleEStr = xmlReader.GetAttribute("DateType");
+                    if (articleEStr == "Electronic")
+                    {
+                        xmlReader.Read();
+                        while ((xmlReader.Name != "Year" && xmlReader.Name != "Month"
+                            && xmlReader.Name != "Day") || !xmlReader.IsStartElement())
+                        {
+                            xmlReader.Read();
+                            if (xmlReader.Name == "Year" && xmlReader.IsStartElement())
+                            {
+                                articleEYearStr = xmlReader.ReadElementString("Year");
+                                continue;
+                            }
+                            if (xmlReader.Name == "Month" && xmlReader.IsStartElement())
+                            {
+                                articleEMonthStr = xmlReader.ReadElementString("Month");
+                                continue;
+                            }
+                            if (xmlReader.Name == "Day" && xmlReader.IsStartElement())
+                            {
+                                articleEDayStr = xmlReader.ReadElementString("Day");
+                                continue;
+                            }
+                            if (xmlReader.Name == "ArticleDate" && xmlReader.NodeType == XmlNodeType.EndElement)
+                            {
+                                xmlReader.Read();
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
+            while (xmlReader.Name != "History" || !xmlReader.IsStartElement())
+            {
+                xmlReader.Read();
+                if (xmlReader.Name == "History" && xmlReader.IsStartElement())
+                {
+                    while (xmlReader.Read())
+                    {
+                        if (xmlReader.IsStartElement())
+                        {
+                            string statusStr = xmlReader.GetAttribute("PubStatus");
+                            if (statusStr == "entrez")
+                            {
+                                xmlReader.Read();
+                                while ((xmlReader.Name != "Year" && xmlReader.Name != "Month"
+                                    && xmlReader.Name != "Day") || !xmlReader.IsStartElement())
                                 {
                                     xmlReader.Read();
-                                    while ((xmlReader.Name != "Year" && xmlReader.Name != "Month"
-                                        && xmlReader.Name != "Day") || !xmlReader.IsStartElement())
+                                    if (xmlReader.Name == "Year" && xmlReader.IsStartElement())
                                     {
-                                        xmlReader.Read();
-                                        if (xmlReader.Name == "Year" && xmlReader.IsStartElement())
-                                        {
-                                            entrezYearStr = xmlReader.ReadElementString("Year");
-                                            continue;
-                                        }
-                                        if (xmlReader.Name == "Month" && xmlReader.IsStartElement())
-                                        {
-                                            entrezMonthStr = xmlReader.ReadElementString("Month");
-                                            continue;
-                                        }
-                                        if (xmlReader.Name == "Day" && xmlReader.IsStartElement())
-                                        {
-                                            entrezDayStr = xmlReader.ReadElementString("Day");
-                                            continue;
-                                        }
-                                        if ((xmlReader.Name == "Hour" || xmlReader.Name == "Minute") && xmlReader.IsStartElement())
-                                        {
-                                            break;
-                                        }
-                                        if (xmlReader.Name == "PubMedPubDate" && xmlReader.NodeType == XmlNodeType.EndElement)
-                                        {
-                                            xmlReader.Read();
-                                            break;
-                                        }
+                                        entrezYearStr = xmlReader.ReadElementString("Year");
+                                        continue;
                                     }
-                                }
-                                else if (xmlReader.GetAttribute("PubStatus") == "pubmed")
-                                {
-                                    xmlReader.Read();
-                                    while ((xmlReader.Name != "Year" && xmlReader.Name != "Month"
-                                        && xmlReader.Name != "Day") || !xmlReader.IsStartElement())
+                                    if (xmlReader.Name == "Month" && xmlReader.IsStartElement())
                                     {
-                                        xmlReader.Read();
-                                        if (xmlReader.Name == "Year" && xmlReader.IsStartElement())
-                                        {
-                                            pubmedYearStr = xmlReader.ReadElementString("Year");
-                                            continue;
-                                        }
-                                        if (xmlReader.Name == "Month" && xmlReader.IsStartElement())
-                                        {
-                                            pubmedMonthStr = xmlReader.ReadElementString("Month");
-                                            continue;
-                                        }
-                                        if (xmlReader.Name == "Day" && xmlReader.IsStartElement())
-                                        {
-                                            pubmedDayStr = xmlReader.ReadElementString("Day");
-                                            continue;
-                                        }
-                                        if ((xmlReader.Name == "Hour" || xmlReader.Name == "Minute") && xmlReader.IsStartElement())
-                                        {
-                                            break;
-                                        }
-                                        if (xmlReader.Name == "PubMedPubDate" && xmlReader.NodeType == XmlNodeType.EndElement)
-                                        {
-                                            xmlReader.Read();
-                                            break;
-                                        }
+                                        entrezMonthStr = xmlReader.ReadElementString("Month");
+                                        continue;
                                     }
-                                    if ((xmlReader.Name == "PubmedData" || xmlReader.Name == "History") && xmlReader.NodeType == XmlNodeType.EndElement)
+                                    if (xmlReader.Name == "Day" && xmlReader.IsStartElement())
                                     {
-                                        // xmlReader.Read();
+                                        entrezDayStr = xmlReader.ReadElementString("Day");
+                                        continue;
+                                    }
+                                    if ((xmlReader.Name == "Hour" || xmlReader.Name == "Minute") && xmlReader.IsStartElement())
+                                    {
                                         break;
                                     }
-
+                                    if (xmlReader.Name == "PubMedPubDate" && xmlReader.NodeType == XmlNodeType.EndElement)
+                                    {
+                                        xmlReader.Read();
+                                        break;
+                                    }
                                 }
-                                else
+                            }
+                            else if (xmlReader.GetAttribute("PubStatus") == "pubmed")
+                            {
+                                xmlReader.Read();
+                                while ((xmlReader.Name != "Year" && xmlReader.Name != "Month"
+                                    && xmlReader.Name != "Day") || !xmlReader.IsStartElement())
                                 {
-                                    continue;
+                                    xmlReader.Read();
+                                    if (xmlReader.Name == "Year" && xmlReader.IsStartElement())
+                                    {
+                                        pubmedYearStr = xmlReader.ReadElementString("Year");
+                                        continue;
+                                    }
+                                    if (xmlReader.Name == "Month" && xmlReader.IsStartElement())
+                                    {
+                                        pubmedMonthStr = xmlReader.ReadElementString("Month");
+                                        continue;
+                                    }
+                                    if (xmlReader.Name == "Day" && xmlReader.IsStartElement())
+                                    {
+                                        pubmedDayStr = xmlReader.ReadElementString("Day");
+                                        continue;
+                                    }
+                                    if ((xmlReader.Name == "Hour" || xmlReader.Name == "Minute") && xmlReader.IsStartElement())
+                                    {
+                                        break;
+                                    }
+                                    if (xmlReader.Name == "PubMedPubDate" && xmlReader.NodeType == XmlNodeType.EndElement)
+                                    {
+                                        xmlReader.Read();
+                                        break;
+                                    }
                                 }
-
-                            }
-                            if (xmlReader.Name == "History" && xmlReader.NodeType == XmlNodeType.EndElement)
-                            {
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-                while (xmlReader.Name != "ArticleIdList" || !xmlReader.IsStartElement())
-                {
-                    xmlReader.Read();
-                    if (xmlReader.Name == "ArticleIdList" && xmlReader.IsStartElement())
-                    {
-                        while (xmlReader.Read())
-                        {
-                            if (xmlReader.IsStartElement())
-                            {
-                                string IdTypeStr = xmlReader.GetAttribute("IdType");
-                                if (IdTypeStr == "pmc")
+                                if ((xmlReader.Name == "PubmedData" || xmlReader.Name == "History") && xmlReader.NodeType == XmlNodeType.EndElement)
                                 {
-                                    pmcidStr = xmlReader.ReadString();
+                                    // xmlReader.Read();
                                     break;
                                 }
+
                             }
-                            if (xmlReader.Name == "ArticleIdList" && xmlReader.NodeType == XmlNodeType.EndElement)
+                            else
                             {
+                                continue;
+                            }
+
+                        }
+                        if (xmlReader.Name == "History" && xmlReader.NodeType == XmlNodeType.EndElement)
+                        {
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            while (xmlReader.Name != "ArticleIdList" || !xmlReader.IsStartElement())
+            {
+                xmlReader.Read();
+                if (xmlReader.Name == "ArticleIdList" && xmlReader.IsStartElement())
+                {
+                    while (xmlReader.Read())
+                    {
+                        if (xmlReader.IsStartElement())
+                        {
+                            string IdTypeStr = xmlReader.GetAttribute("IdType");
+                            if (IdTypeStr == "pmc")
+                            {
+                                pmcidStr = xmlReader.ReadString();
                                 break;
                             }
                         }
-                        break;
+                        if (xmlReader.Name == "ArticleIdList" && xmlReader.NodeType == XmlNodeType.EndElement)
+                        {
+                            break;
+                        }
                     }
+                    break;
                 }
-                break;
-            } // load loop         
-        }
-        catch (Exception ex)
-        {
-            // most likely a time out has happened
-            ;
-        }
-
+            }
+            break;
+        } // load loop         
         xmlReader.Close();
         return isBook;
     }
@@ -1071,7 +981,7 @@ public partial class RetrievePub : System.Web.UI.Page
         //if (MemberConflict(authorList))
         {
             DateTime today = DateTime.Now;
-            SavePublog(pmid.ToString() + " name conflict", today, "GetAndInsertAllInfoForOnePmid");
+            SavePublog(pmid.ToString() + " name conflict", today);
             if (!forceImport)
             {
                 SaveReject(pmid, "name conflict"); //found reject name
@@ -1251,8 +1161,6 @@ public partial class RetrievePub : System.Web.UI.Page
         string sqlStatement;
         int publicationId = 0;
         DateTime today = DateTime.Now;
-        string sqlStatementFinal = "";
-
         try
         {
             sqlStatement =
@@ -1273,566 +1181,368 @@ public partial class RetrievePub : System.Web.UI.Page
 
             SqlCommand myCommand = new SqlCommand(sqlStatement, myConnection);
 
-            try
+            SqlParameter journal_titleParameter = new SqlParameter();
+            journal_titleParameter.ParameterName = "@journal_title";
+            journal_titleParameter.SqlDbType = SqlDbType.VarChar;
+            if (journalTitleStr != "")
             {
-                SqlParameter journal_titleParameter = new SqlParameter();
-                journal_titleParameter.ParameterName = "@journal_title";
-                journal_titleParameter.SqlDbType = SqlDbType.VarChar;
-                if (journalTitleStr != "")
-                {
-                    journal_titleParameter.Value = journalTitleStr;
-                }
-                else
-                {
-                    journal_titleParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(journal_titleParameter);
+                journal_titleParameter.Value = journalTitleStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (journal_title)");
+                journal_titleParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(journal_titleParameter);
 
+            SqlParameter issnParameter = new SqlParameter();
+            issnParameter.ParameterName = "@issn";
+            issnParameter.SqlDbType = SqlDbType.VarChar;
+            if (issnStr != "")
+            {
+                issnParameter.Value = issnStr;
+            }
+            else
+            {
+                issnParameter.Value = DBNull.Value;
+            }
+            myCommand.Parameters.Add(issnParameter);
 
-            try
+            SqlParameter issn_typeParameter = new SqlParameter();
+            issn_typeParameter.ParameterName = "@issn_type";
+            issn_typeParameter.SqlDbType = SqlDbType.VarChar;
+            if (IssnTypeStr != "")
             {
-                SqlParameter issnParameter = new SqlParameter();
-                issnParameter.ParameterName = "@issn";
-                issnParameter.SqlDbType = SqlDbType.VarChar;
-                if (issnStr != "")
-                {
-                    issnParameter.Value = issnStr;
-                }
-                else
-                {
-                    issnParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(issnParameter);
+                issn_typeParameter.Value = IssnTypeStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (issn)");
+                issn_typeParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(issn_typeParameter);
 
-            try
+            SqlParameter volumeParameter = new SqlParameter();
+            volumeParameter.ParameterName = "@volume";
+            volumeParameter.SqlDbType = SqlDbType.VarChar;
+            if (VolumeStr != "")
             {
-                SqlParameter issn_typeParameter = new SqlParameter();
-                issn_typeParameter.ParameterName = "@issn_type";
-                issn_typeParameter.SqlDbType = SqlDbType.VarChar;
-                if (IssnTypeStr != "")
-                {
-                    issn_typeParameter.Value = IssnTypeStr;
-                }
-                else
-                {
-                    issn_typeParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(issn_typeParameter);
+                volumeParameter.Value = VolumeStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (issn_type)");
+                volumeParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(volumeParameter);
 
-            try
+            SqlParameter issueParameter = new SqlParameter();
+            issueParameter.ParameterName = "@issue";
+            issueParameter.SqlDbType = SqlDbType.VarChar;
+            if (IssueStr != "")
             {
-                SqlParameter volumeParameter = new SqlParameter();
-                volumeParameter.ParameterName = "@volume";
-                volumeParameter.SqlDbType = SqlDbType.VarChar;
-                if (VolumeStr != "")
-                {
-                    volumeParameter.Value = VolumeStr;
-                }
-                else
-                {
-                    volumeParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(volumeParameter);
+                issueParameter.Value = IssueStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (volume)");
+                issueParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(issueParameter);
 
-            try
+            SqlParameter pub_yearParameter = new SqlParameter();
+            pub_yearParameter.ParameterName = "@pub_year";
+            pub_yearParameter.SqlDbType = SqlDbType.Int;
+            if (YearStr != "")
             {
-                SqlParameter issueParameter = new SqlParameter();
-                issueParameter.ParameterName = "@issue";
-                issueParameter.SqlDbType = SqlDbType.VarChar;
-                if (IssueStr != "")
-                {
-                    issueParameter.Value = IssueStr;
-                }
-                else
-                {
-                    issueParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(issueParameter);
+                pub_yearParameter.Value = Convert.ToInt32(YearStr);
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (isse)");
+                pub_yearParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(pub_yearParameter);
 
-            try
+            SqlParameter pub_seasonParameter = new SqlParameter();
+            pub_seasonParameter.ParameterName = "@pub_season";
+            pub_seasonParameter.SqlDbType = SqlDbType.VarChar;
+            if (SeasonStr != "")
             {
-                SqlParameter pub_yearParameter = new SqlParameter();
-                pub_yearParameter.ParameterName = "@pub_year";
-                pub_yearParameter.SqlDbType = SqlDbType.Int;
-                if (YearStr != "")
-                {
-                    pub_yearParameter.Value = Convert.ToInt32(YearStr);
-                }
-                else
-                {
-                    pub_yearParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(pub_yearParameter);
+                pub_seasonParameter.Value = SeasonStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (pub_year)");
+                pub_seasonParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(pub_seasonParameter);
 
-            try
+            SqlParameter pub_monthParameter = new SqlParameter();
+            pub_monthParameter.ParameterName = "@pub_month";
+            pub_monthParameter.SqlDbType = SqlDbType.VarChar;
+            if (MonthStr != "")
             {
-                SqlParameter pub_seasonParameter = new SqlParameter();
-                pub_seasonParameter.ParameterName = "@pub_season";
-                pub_seasonParameter.SqlDbType = SqlDbType.VarChar;
-                if (SeasonStr != "")
-                {
-                    pub_seasonParameter.Value = SeasonStr;
-                }
-                else
-                {
-                    pub_seasonParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(pub_seasonParameter);
+                pub_monthParameter.Value = MonthStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (pub_season)");
+                pub_monthParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(pub_monthParameter);
 
-            try
+            SqlParameter pub_dayParameter = new SqlParameter();
+            pub_dayParameter.ParameterName = "@pub_day";
+            pub_dayParameter.SqlDbType = SqlDbType.Int;
+            if (DayStr != "")
             {
-                SqlParameter pub_monthParameter = new SqlParameter();
-                pub_monthParameter.ParameterName = "@pub_month";
-                pub_monthParameter.SqlDbType = SqlDbType.VarChar;
-                if (MonthStr != "")
-                {
-                    pub_monthParameter.Value = MonthStr;
-                }
-                else
-                {
-                    pub_monthParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(pub_monthParameter);
+                pub_dayParameter.Value = Convert.ToInt32(DayStr);
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (pub_month)");
+                pub_dayParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(pub_dayParameter);
 
-            try
+            SqlParameter MedlineDateParameter = new SqlParameter();
+            MedlineDateParameter.ParameterName = "@MedlineDate";
+            MedlineDateParameter.SqlDbType = SqlDbType.VarChar;
+            if (MedlineDateStr != "")
             {
-                SqlParameter pub_dayParameter = new SqlParameter();
-                pub_dayParameter.ParameterName = "@pub_day";
-                pub_dayParameter.SqlDbType = SqlDbType.Int;
-                if (DayStr != "")
-                {
-                    pub_dayParameter.Value = Convert.ToInt32(DayStr);
-                }
-                else
-                {
-                    pub_dayParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(pub_dayParameter);
+                MedlineDateParameter.Value = MedlineDateStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (pub_day)");
+                MedlineDateParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(MedlineDateParameter);
 
-            try
+            SqlParameter article_titleParameter = new SqlParameter();
+            article_titleParameter.ParameterName = "@article_title";
+            article_titleParameter.SqlDbType = SqlDbType.NVarChar;
+            if (ArticleTitleStr != "")
             {
-                SqlParameter MedlineDateParameter = new SqlParameter();
-                MedlineDateParameter.ParameterName = "@MedlineDate";
-                MedlineDateParameter.SqlDbType = SqlDbType.VarChar;
-                if (MedlineDateStr != "")
-                {
-                    MedlineDateParameter.Value = MedlineDateStr;
-                }
-                else
-                {
-                    MedlineDateParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(MedlineDateParameter);
+                article_titleParameter.Value = ArticleTitleStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (MedlineDate)");
+                article_titleParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(article_titleParameter);
 
-            try
+            SqlParameter ISOAbbreviationParameter = new SqlParameter();
+            ISOAbbreviationParameter.ParameterName = "@ISOAbbreviation";
+            ISOAbbreviationParameter.SqlDbType = SqlDbType.VarChar;
+            if (ISOAbbreviationStr != "")
             {
-                SqlParameter article_titleParameter = new SqlParameter();
-                article_titleParameter.ParameterName = "@article_title";
-                article_titleParameter.SqlDbType = SqlDbType.NVarChar;
-                if (ArticleTitleStr != "")
-                {
-                    article_titleParameter.Value = ArticleTitleStr;
-                }
-                else
-                {
-                    article_titleParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(article_titleParameter);
+                ISOAbbreviationParameter.Value = ISOAbbreviationStr.Replace(".","");
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (article_title)");
+                ISOAbbreviationParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(ISOAbbreviationParameter);
 
-            try
+            SqlParameter abstract_textParameter = new SqlParameter();
+            abstract_textParameter.ParameterName = "@abstract_text";
+            abstract_textParameter.SqlDbType = SqlDbType.NVarChar;
+            if (AbstractTextStr != "")
             {
-                SqlParameter ISOAbbreviationParameter = new SqlParameter();
-                ISOAbbreviationParameter.ParameterName = "@ISOAbbreviation";
-                ISOAbbreviationParameter.SqlDbType = SqlDbType.VarChar;
-                if (ISOAbbreviationStr != "")
-                {
-                    ISOAbbreviationParameter.Value = ISOAbbreviationStr.Replace(".", "");
-                }
-                else
-                {
-                    ISOAbbreviationParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(ISOAbbreviationParameter);
+                abstract_textParameter.Value = AbstractTextStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (ISOAbbreviation)");
+                abstract_textParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(abstract_textParameter);
 
-            try
+            SqlParameter MedlinePgnParameter = new SqlParameter();
+            MedlinePgnParameter.ParameterName = "@MedlinePgn";
+            MedlinePgnParameter.SqlDbType = SqlDbType.VarChar;
+            if (MedlinePgnStr != "")
             {
-                SqlParameter abstract_textParameter = new SqlParameter();
-                abstract_textParameter.ParameterName = "@abstract_text";
-                abstract_textParameter.SqlDbType = SqlDbType.NVarChar;
-                if (AbstractTextStr != "")
-                {
-                    abstract_textParameter.Value = AbstractTextStr;
-                }
-                else
-                {
-                    abstract_textParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(abstract_textParameter);
+                MedlinePgnParameter.Value = MedlinePgnStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (abstract_text)");
+                MedlinePgnParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(MedlinePgnParameter);
 
-            try
+            SqlParameter pmcidParameter = new SqlParameter();
+            pmcidParameter.ParameterName = "@pmcid";
+            pmcidParameter.SqlDbType = SqlDbType.VarChar;
+            if (pmcidStr != "")
             {
-                SqlParameter MedlinePgnParameter = new SqlParameter();
-                MedlinePgnParameter.ParameterName = "@MedlinePgn";
-                MedlinePgnParameter.SqlDbType = SqlDbType.VarChar;
-                if (MedlinePgnStr != "")
-                {
-                    MedlinePgnParameter.Value = MedlinePgnStr;
-                }
-                else
-                {
-                    MedlinePgnParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(MedlinePgnParameter);
+                pmcidParameter.Value = pmcidStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (MedlinePgn)");
+                pmcidParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(pmcidParameter);
 
-            try
-            {
-                SqlParameter pmcidParameter = new SqlParameter();
-                pmcidParameter.ParameterName = "@pmcid";
-                pmcidParameter.SqlDbType = SqlDbType.VarChar;
-                if (pmcidStr != "")
-                {
-                    pmcidParameter.Value = pmcidStr;
-                }
-                else
-                {
-                    pmcidParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(pmcidParameter);
-            }
-            catch (Exception ex)
-            {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (pmcid)");
-            }
+            SqlParameter pmidParameter = new SqlParameter();
+            pmidParameter.ParameterName = "@pmid";
+            pmidParameter.SqlDbType = SqlDbType.Int;
+            pmidParameter.Value = pmid;
+            myCommand.Parameters.Add(pmidParameter);
 
-            try
+            SqlParameter CollectiveNameParameter = new SqlParameter();
+            CollectiveNameParameter.ParameterName = "@CollectiveName";
+            CollectiveNameParameter.SqlDbType = SqlDbType.VarChar;
+            if (CollectiveNameStr != "")
             {
-                SqlParameter pmidParameter = new SqlParameter();
-                pmidParameter.ParameterName = "@pmid";
-                pmidParameter.SqlDbType = SqlDbType.Int;
-                pmidParameter.Value = pmid;
-                myCommand.Parameters.Add(pmidParameter);
+                CollectiveNameParameter.Value = CollectiveNameStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (pmid)");
+                CollectiveNameParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(CollectiveNameParameter);
 
-            try
+            SqlParameter article_e_yearParameter = new SqlParameter();
+            article_e_yearParameter.ParameterName = "@article_e_year";
+            article_e_yearParameter.SqlDbType = SqlDbType.VarChar;
+            if (articleEYearStr != "")
             {
-                SqlParameter CollectiveNameParameter = new SqlParameter();
-                CollectiveNameParameter.ParameterName = "@CollectiveName";
-                CollectiveNameParameter.SqlDbType = SqlDbType.VarChar;
-                if (CollectiveNameStr != "")
-                {
-                    CollectiveNameParameter.Value = CollectiveNameStr;
-                }
-                else
-                {
-                    CollectiveNameParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(CollectiveNameParameter);
+                article_e_yearParameter.Value = articleEYearStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (CollectiveName)");
+                article_e_yearParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(article_e_yearParameter);
 
-            try
+            SqlParameter article_e_monthParameter = new SqlParameter();
+            article_e_monthParameter.ParameterName = "@article_e_month";
+            article_e_monthParameter.SqlDbType = SqlDbType.VarChar;
+            if (articleEMonthStr != "")
             {
-                SqlParameter article_e_yearParameter = new SqlParameter();
-                article_e_yearParameter.ParameterName = "@article_e_year";
-                article_e_yearParameter.SqlDbType = SqlDbType.VarChar;
-                if (articleEYearStr != "")
-                {
-                    article_e_yearParameter.Value = articleEYearStr;
-                }
-                else
-                {
-                    article_e_yearParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(article_e_yearParameter);
+                article_e_monthParameter.Value = articleEMonthStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (article_year)");
+                article_e_monthParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(article_e_monthParameter);
 
-            try
+            SqlParameter article_e_dayParameter = new SqlParameter();
+            article_e_dayParameter.ParameterName = "@article_e_day";
+            article_e_dayParameter.SqlDbType = SqlDbType.VarChar;
+            if (articleEDayStr != "")
             {
-                SqlParameter article_e_monthParameter = new SqlParameter();
-                article_e_monthParameter.ParameterName = "@article_e_month";
-                article_e_monthParameter.SqlDbType = SqlDbType.VarChar;
-                if (articleEMonthStr != "")
-                {
-                    article_e_monthParameter.Value = articleEMonthStr;
-                }
-                else
-                {
-                    article_e_monthParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(article_e_monthParameter);
+                article_e_dayParameter.Value = articleEDayStr;
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (article_e_month)");
+                article_e_dayParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(article_e_dayParameter);
 
-            try
+            SqlParameter entrez_yearParameter = new SqlParameter();
+            entrez_yearParameter.ParameterName = "@entrez_year";
+            entrez_yearParameter.SqlDbType = SqlDbType.Int;
+            if (entrezYearStr != "")
             {
-                SqlParameter article_e_dayParameter = new SqlParameter();
-                article_e_dayParameter.ParameterName = "@article_e_day";
-                article_e_dayParameter.SqlDbType = SqlDbType.VarChar;
-                if (articleEDayStr != "")
-                {
-                    article_e_dayParameter.Value = articleEDayStr;
-                }
-                else
-                {
-                    article_e_dayParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(article_e_dayParameter);
+                entrez_yearParameter.Value = Convert.ToInt32(entrezYearStr);
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (article_e_day)");
+                entrez_yearParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(entrez_yearParameter);
 
-            try
+            SqlParameter entrez_monthParameter = new SqlParameter();
+            entrez_monthParameter.ParameterName = "@entrez_month";
+            entrez_monthParameter.SqlDbType = SqlDbType.Int;
+            if (entrezMonthStr != "")
             {
-                SqlParameter entrez_yearParameter = new SqlParameter();
-                entrez_yearParameter.ParameterName = "@entrez_year";
-                entrez_yearParameter.SqlDbType = SqlDbType.Int;
-                if (entrezYearStr != "")
-                {
-                    entrez_yearParameter.Value = Convert.ToInt32(entrezYearStr);
-                }
-                else
-                {
-                    entrez_yearParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(entrez_yearParameter);
+                entrez_monthParameter.Value = Convert.ToInt32(entrezMonthStr);
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (entrez_year)");
+                entrez_monthParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(entrez_monthParameter);
 
-            try
+            SqlParameter entrez_dayParameter = new SqlParameter();
+            entrez_dayParameter.ParameterName = "@entrez_day";
+            entrez_dayParameter.SqlDbType = SqlDbType.Int;
+            if (entrezDayStr != "")
             {
-                SqlParameter entrez_monthParameter = new SqlParameter();
-                entrez_monthParameter.ParameterName = "@entrez_month";
-                entrez_monthParameter.SqlDbType = SqlDbType.Int;
-                if (entrezMonthStr != "")
-                {
-                    entrez_monthParameter.Value = Convert.ToInt32(entrezMonthStr);
-                }
-                else
-                {
-                    entrez_monthParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(entrez_monthParameter);
+                entrez_dayParameter.Value = Convert.ToInt32(entrezDayStr);
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (entrez_month)");
+                entrez_dayParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(entrez_dayParameter);
 
-            try
+            SqlParameter pubmed_yearParameter = new SqlParameter();
+            pubmed_yearParameter.ParameterName = "@pubmed_year";
+            pubmed_yearParameter.SqlDbType = SqlDbType.Int;
+            if (pubmedYearStr != "")
             {
-                SqlParameter entrez_dayParameter = new SqlParameter();
-                entrez_dayParameter.ParameterName = "@entrez_day";
-                entrez_dayParameter.SqlDbType = SqlDbType.Int;
-                if (entrezDayStr != "")
-                {
-                    entrez_dayParameter.Value = Convert.ToInt32(entrezDayStr);
-                }
-                else
-                {
-                    entrez_dayParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(entrez_dayParameter);
+                pubmed_yearParameter.Value = Convert.ToInt32(pubmedYearStr);
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (entrez_day)");
+                pubmed_yearParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(pubmed_yearParameter);
 
-            try
+            SqlParameter pubmed_monthParameter = new SqlParameter();
+            pubmed_monthParameter.ParameterName = "@pubmed_month";
+            pubmed_monthParameter.SqlDbType = SqlDbType.Int;
+            if (pubmedMonthStr != "")
             {
-                SqlParameter pubmed_yearParameter = new SqlParameter();
-                pubmed_yearParameter.ParameterName = "@pubmed_year";
-                pubmed_yearParameter.SqlDbType = SqlDbType.Int;
-                if (pubmedYearStr != "")
-                {
-                    pubmed_yearParameter.Value = Convert.ToInt32(pubmedYearStr);
-                }
-                else
-                {
-                    pubmed_yearParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(pubmed_yearParameter);
+                pubmed_monthParameter.Value = Convert.ToInt32(pubmedMonthStr);
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (pubmed_year)");
+                pubmed_monthParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(pubmed_monthParameter);
 
-            try
+            SqlParameter pubmed_dayParameter = new SqlParameter();
+            pubmed_dayParameter.ParameterName = "@pubmed_day";
+            pubmed_dayParameter.SqlDbType = SqlDbType.Int;
+            if (pubmedDayStr != "")
             {
-                SqlParameter pubmed_monthParameter = new SqlParameter();
-                pubmed_monthParameter.ParameterName = "@pubmed_month";
-                pubmed_monthParameter.SqlDbType = SqlDbType.Int;
-                if (pubmedMonthStr != "")
-                {
-                    pubmed_monthParameter.Value = Convert.ToInt32(pubmedMonthStr);
-                }
-                else
-                {
-                    pubmed_monthParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(pubmed_monthParameter);
+                pubmed_dayParameter.Value = Convert.ToInt32(pubmedDayStr);
             }
-            catch (Exception ex)
+            else
             {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (pubmed_month)");
+                pubmed_dayParameter.Value = DBNull.Value;
             }
+            myCommand.Parameters.Add(pubmed_dayParameter);
 
-            try
-            {
-                SqlParameter pubmed_dayParameter = new SqlParameter();
-                pubmed_dayParameter.ParameterName = "@pubmed_day";
-                pubmed_dayParameter.SqlDbType = SqlDbType.Int;
-                if (pubmedDayStr != "")
-                {
-                    pubmed_dayParameter.Value = Convert.ToInt32(pubmedDayStr);
-                }
-                else
-                {
-                    pubmed_dayParameter.Value = DBNull.Value;
-                }
-                myCommand.Parameters.Add(pubmed_dayParameter);
-            }
-            catch (Exception ex)
-            {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (pubmed_day)");
-            }
-
-            try
-            {
-                SqlParameter publication_idParameter = new SqlParameter();
-                publication_idParameter.ParameterName = "@publication_id";
-                publication_idParameter.SqlDbType = SqlDbType.Int;
-                publication_idParameter.Direction = ParameterDirection.Output;
-                myCommand.Parameters.Add(publication_idParameter);
-                publicationId = (int)publication_idParameter.Value;
-            }
-            catch (Exception ex)
-            {
-                SavePublog(pmid.ToString() + ", " + ex.Message.ToString(), today, "Error - InsertOnePublication - Parameter (publication_id)");
-            }
-
-            sqlStatementFinal = myCommand.CommandText;
+            SqlParameter publication_idParameter = new SqlParameter();
+            publication_idParameter.ParameterName = "@publication_id";
+            publication_idParameter.SqlDbType = SqlDbType.Int;
+            publication_idParameter.Direction = ParameterDirection.Output;
+            myCommand.Parameters.Add(publication_idParameter);
 
             myConnection.Open();
             myCommand.ExecuteNonQuery();
+            publicationId = (int)publication_idParameter.Value;
         }
         catch (Exception ex)
         {
-            SavePublog(pmid.ToString() + ", " + ex.Message.ToString() , today, "Error - InsertOnePublication", sqlStatementFinal);
+            SavePublog(pmid.ToString() + ", " + ex.Message.ToString() , today);
         }
-
         finally
         {
             myConnection.Close();
         }
 
-        SavePublog(pmid.ToString(), today, "InsertOnePublication");
+        SavePublog(pmid.ToString(), today);
 
         return publicationId;
     }
-    protected void SavePublog(string value, DateTime theDate, string tag, string query = "")
+    protected void SavePublog(string value, DateTime theDate)
     {
-        // Check this 
-        //string pmuser = System.Web.HttpContext.Current.User.Identity.Name;
-        //string pmuser = Session["userId"].ToString();
-        string pmuser = "";
-
         string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
         SqlConnection myConnection = new SqlConnection(connectionStr);
         string sqlStatement;
 
-        sqlStatement = "insert into publog (value,log_date,time_stamp,pmuser,tag, query)" +
-            " values(@value,@log_date,@time_stamp,@pmuser,@tag,@query)";
+        sqlStatement = "insert into publog (value,log_date)" +
+            " values(@value,@log_date)";
 
         SqlCommand command = new SqlCommand(sqlStatement, myConnection);
 
@@ -1848,41 +1558,9 @@ public partial class RetrievePub : System.Web.UI.Page
         log_dateParameter.Value = theDate;
         command.Parameters.Add(log_dateParameter);
 
-        SqlParameter time_stampParameter = new SqlParameter();
-        time_stampParameter.ParameterName = "@time_stamp";
-        time_stampParameter.SqlDbType = SqlDbType.DateTime;
-        time_stampParameter.Value = theDate;
-        command.Parameters.Add(time_stampParameter);
-
-        SqlParameter pmuserParameter = new SqlParameter();
-        pmuserParameter.ParameterName = "@pmuser";
-        pmuserParameter.SqlDbType = SqlDbType.VarChar;
-        pmuserParameter.Value = pmuser;
-        command.Parameters.Add(pmuserParameter);
-
-        SqlParameter tagParameter = new SqlParameter();
-        tagParameter.ParameterName = "@tag";
-        tagParameter.SqlDbType = SqlDbType.VarChar;
-        tagParameter.Value = tag;
-        command.Parameters.Add(tagParameter);
-
-        SqlParameter queryParameter = new SqlParameter();
-        queryParameter.ParameterName = "@query";
-        queryParameter.SqlDbType = SqlDbType.VarChar;
-        queryParameter.Value = query;
-        command.Parameters.Add(queryParameter);
-
-        try
-        {
-            myConnection.Open();
-            command.ExecuteNonQuery();
-            myConnection.Close();
-        }
-        catch (Exception ex)
-        {
-            // ignore this as this is the error log so no where for the message to land
-            if(myConnection.State == ConnectionState.Open) myConnection.Close();
-        }
+        myConnection.Open();
+        command.ExecuteNonQuery();
+        myConnection.Close();
 
     }
     protected void SaveReject(int pmid, string note)
@@ -2964,27 +2642,13 @@ public partial class RetrievePub : System.Web.UI.Page
         }
         hdnClientWithPlusSign.Value = clientPlusSign;
 
-        string url = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" + clientPlusSign + @"[au]" + "&retmax=10000&usehistory=y";
+        string url = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" + clientPlusSign + @"[au]" + "&retmax=5000&usehistory=y";
         SearchPub(url);
 
     }
     protected void btnSearchPmid_Click(object sender, EventArgs e)
     {
-        List<int> pmidList = null;
-
-        if (txtPmidSearch.Text.Contains(' '))
-        {
-            pmidList = new List<int>(txtPmidSearch.Text.Split(' ').Select(int.Parse));
-        }
-        else if (txtPmidSearch.Text.Contains(','))
-        {
-            pmidList = new List<int>(txtPmidSearch.Text.Split(',').Select(int.Parse));
-        }
-        else
-        {
-            pmidList = new List<int>(txtPmidSearch.Text.Split(',').Select(int.Parse));
-        }
-        //List<int> pmidList = new List<int>(txtPmidSearch.Text.Split(',').Select(int.Parse));
+        List<int> pmidList = new List<int>(txtPmidSearch.Text.Split(',').Select(int.Parse));
         //int pmid = Convert.ToInt32(txtPmidSearch.Text);
         foreach (int pmid in pmidList)
         {

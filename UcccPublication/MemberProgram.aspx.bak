@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Default.master" AutoEventWireup="true" CodeFile="MemberInstitution.aspx.cs" Inherits="MemberInstitution" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Default.master" AutoEventWireup="true" CodeFile="MemberProgram.aspx.cs" Inherits="MemberProgram" %>
 
 <%@ Register TagPrefix="OrganMap" Namespace="OrganMapSite" %>
 <%@ Register TagPrefix="OrganMap" TagName="LoginBanner" Src="LoginBanner.ascx" %>
@@ -7,7 +7,7 @@
     <div id="body">
             <div class="fullblock" id="inventoryDiv" runat="server" style="text-align:center">
                 <font color="maroon" size="2" style="font-weight:bold">
-                    Member Institution<br />
+                    Member Program<br />
                 </font>
                 <asp:Label runat="server" ID="ErrorMessage" ForeColor="Red"></asp:Label>                
                 <br />
@@ -23,34 +23,30 @@
                     <asp:label id="lblName" runat="server" CssClass="clsAlert"></asp:label></DIV><br />
 
                 <asp:datagrid id="myDatagrid" runat="server" Font-Size="X-Small" 
-                    GridLines="Vertical" CellPadding="4"
+                        GridLines="Vertical" CellPadding="4"
 					BackColor="White" BorderWidth="1px" BorderStyle="None" BorderColor="#DEDFDE" 
-                    AutoGenerateColumns="False" 
-                    OnDeleteCommand="myDatagrid_DeleteCommand"
-					OnEditCommand="myDatagrid_OnEditCommand" 
-                    OnCancelCommand="myDatagrid_CancelCommand" 
-                    OnItemDataBound="myDatagrid_ItemDataBound" 
-                    OnUpdateCommand="myDatagrid_UpdateCommand"
-					OnItemCommand="DoInsert" 
-                    ShowFooter="True" ForeColor="Black">
+                        AutoGenerateColumns="False" OnDeleteCommand="myDatagrid_DeleteCommand"
+					OnEditCommand="myDatagrid_OnEditCommand" OnCancelCommand="myDatagrid_CancelCommand" 
+                        OnItemDataBound="myDatagrid_ItemDataBound" OnUpdateCommand="myDatagrid_UpdateCommand"
+					OnItemCommand="DoInsert" ShowFooter="True" ForeColor="Black">
 					<FooterStyle BackColor="#CCCC99"></FooterStyle>
 					<SelectedItemStyle Font-Bold="True" ForeColor="White" BackColor="#CE5D5A"></SelectedItemStyle>
 					<AlternatingItemStyle BackColor="White"></AlternatingItemStyle>
 					<ItemStyle BackColor="#F7F7DE"></ItemStyle>
 					<HeaderStyle Font-Bold="True" ForeColor="White" BackColor="#6B696B"></HeaderStyle>
 					<Columns>
-						<asp:BoundColumn Visible="False" DataField="client_institution_id" ReadOnly="True" HeaderText="client_institution_id"></asp:BoundColumn>
-						<asp:TemplateColumn ItemStyle-Width="200px" HeaderText="Institution">
+						<asp:BoundColumn Visible="False" DataField="client_program_id" ReadOnly="True" HeaderText="client_program_id"></asp:BoundColumn>
+						<asp:TemplateColumn ItemStyle-Width="200px" HeaderText="Program">
 							<ItemTemplate>
-								<asp:Label id="lblOrigInstitution" Width="180px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.institution") %>'>
+								<asp:Label id="lblOrigProgram" Width="180px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.program") %>'>
 								</asp:Label>
 							</ItemTemplate>
 							<EditItemTemplate>
-								<asp:DropDownList id="ddlInstitution" DataValueField="l_institution_id" DataTextField="institution" Width="180px"
+								<asp:DropDownList id="ddlProgram" DataValueField="l_program_id" DataTextField="program" Width="180px"
 									runat="server"></asp:DropDownList>
 							</EditItemTemplate>
 							<FooterTemplate>
-								<asp:DropDownList id="ddlAddNewInstitution" DataValueField="l_institution_id" DataTextField="institution" Width="180px"
+								<asp:DropDownList id="ddlAddNewProgram" DataValueField="l_program_id" DataTextField="program" Width="180px"
 									runat="server"></asp:DropDownList>
 							</FooterTemplate>
 
@@ -77,11 +73,12 @@
 								</asp:Label>
 							</ItemTemplate>
 							<EditItemTemplate>
-								<asp:TextBox id="txtStartDate" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.start_date") %>'>
+								<asp:TextBox id="txtStartDate" onblur="DateFormat(this,this.value,event,true,'1')" onkeyup="DateFormat(this,this.value,event,false,'1')" onfocus="javascript:vDateType='1'" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.start_date") %>'>
 								</asp:TextBox>
 							</EditItemTemplate>
 							<FooterTemplate>
-								<asp:TextBox ID="txtAddNewStartDate" Columns="5" Width="80px" Runat="Server" />
+								<asp:TextBox ID="txtAddNewStartDate" onblur="DateFormat(this,this.value,event,true,'1')" onkeyup="DateFormat(this,this.value,event,false,'1')"
+									onfocus="javascript:vDateType='1'" Columns="5" Width="80px" Runat="Server" />
 							</FooterTemplate>
 
                             <ItemStyle Width="80px"></ItemStyle>
@@ -92,11 +89,12 @@
 								</asp:Label>
 							</ItemTemplate>
 							<EditItemTemplate>
-								<asp:TextBox id="txtEndDate" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.end_date") %>'>
+								<asp:TextBox id="txtEndDate" onblur="DateFormat(this,this.value,event,true,'1')" onkeyup="DateFormat(this,this.value,event,false,'1')" onfocus="javascript:vDateType='1'" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.end_date") %>'>
 								</asp:TextBox>
 							</EditItemTemplate>
 							<FooterTemplate>
-								<asp:TextBox ID="txtAddNewEndDate" Columns="5" Width="80px" Runat="Server" />
+								<asp:TextBox ID="txtAddNewEndDate" onblur="DateFormat(this,this.value,event,true,'1')" onkeyup="DateFormat(this,this.value,event,false,'1')"
+									onfocus="javascript:vDateType='1'" Columns="5" Width="80px" Runat="Server" />
 							</FooterTemplate>
 
                             <ItemStyle Width="80px"></ItemStyle>
@@ -117,15 +115,10 @@
                             <ItemStyle Width="80px"></ItemStyle>
 						</asp:TemplateColumn>
 						<asp:TemplateColumn HeaderText="">
-                            <EditItemTemplate> 
-                                <asp:LinkButton ID="lbkUpdate" runat="server" CausesValidation="True" CommandName="Update" Text="Save"></asp:LinkButton> 
-                                <asp:LinkButton ID="lnkCancel" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel"></asp:LinkButton> 
-                            </EditItemTemplate> 
 							<FooterTemplate>
 								<asp:LinkButton CommandName="Insert" Text="Add" ID="btnAdd" Runat="server" />
 							</FooterTemplate>
 							<ItemTemplate>
-								<asp:LinkButton ID="lnkEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Edit"></asp:LinkButton> 
 								<asp:LinkButton CommandName="Delete" Text="Delete" ID="btnDel" Runat="server" />
 							</ItemTemplate>
 						</asp:TemplateColumn>

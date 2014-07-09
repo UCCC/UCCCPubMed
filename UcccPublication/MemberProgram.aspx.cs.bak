@@ -23,6 +23,7 @@ public partial class MemberProgram : System.Web.UI.Page
         }
 
     }
+
     #region Web Form Designer generated code
     override protected void OnInit(EventArgs e)
     {
@@ -41,6 +42,7 @@ public partial class MemberProgram : System.Web.UI.Page
     {
     }
     #endregion
+
     protected bool ValidDdlValue(string labelId, string compareStr)
     {
         string itemTemp;
@@ -120,6 +122,7 @@ public partial class MemberProgram : System.Web.UI.Page
             myConnection.Close();
         }
     }
+
     protected void LoadYesNo(DropDownList ddl, string selected)
     {
         string sqlStatement =
@@ -157,6 +160,7 @@ public partial class MemberProgram : System.Web.UI.Page
             myConnection.Close();
         }
     }
+
     protected void myDatagrid_OnEditCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
     {
         myDatagrid.EditItemIndex = e.Item.ItemIndex;
@@ -244,12 +248,6 @@ public partial class MemberProgram : System.Web.UI.Page
             ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
             return;
         }
-        if (ddl.SelectedIndex == 0 || ddl.SelectedIndex == -1)
-        {
-            string msg = "Select program.";
-            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
-            return;
-        }
 
         DropDownList ddl2 = (DropDownList)(e.Item.FindControl("ddlYesNo"));
         string dllIdStr2 = ddl2.SelectedValue;
@@ -258,12 +256,6 @@ public partial class MemberProgram : System.Web.UI.Page
         if (!isValidDdlValue2 && ddlNameStr2 == "Yes")
         {
             string msg = "Cannot duplicate primary program.";
-            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
-            return;
-        }
-        if (ddl2.SelectedIndex == 0 || ddl2.SelectedIndex == -1)
-        {
-            string msg = "Select primary (Yes/No).";
             ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
             return;
         }
@@ -296,6 +288,7 @@ public partial class MemberProgram : System.Web.UI.Page
         FillUpGrid();
         myDatagrid.ShowFooter = true;
     }
+
     protected void FillUpGrid()
     {
         string passedClientIdStr = ddlMember.SelectedValue.ToString();
@@ -348,6 +341,7 @@ public partial class MemberProgram : System.Web.UI.Page
         myDatagrid.DataSource = dataSet1.Tables["Table"].DefaultView;
         myDatagrid.DataBind();
     }
+
     protected void UpdateClientTypeVote(string controlIdStr, string dllIdStr, string dllIdStr2, string startDateStr, string endDateStr, string noteStr)
     {
         string sqlStatement =
@@ -380,6 +374,7 @@ public partial class MemberProgram : System.Web.UI.Page
         FillUpGrid();
 
     }
+
     protected void DoInsert(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
     {
         if (e.CommandName == "Insert")
@@ -428,10 +423,9 @@ public partial class MemberProgram : System.Web.UI.Page
 
             string ddlIdStr = ddl.SelectedValue.ToString();
             string ddlIdStr2 = ddl2.SelectedValue.ToString();
-
             string ddlNameStr = ddl.SelectedItem.ToString();
-            bool isValidProgramDdlValue = ValidDdlValue("lblOrigProgram", ddlNameStr);
-            if (!isValidProgramDdlValue)
+            bool isValidDdlValue = ValidDdlValue("lblOrigProgram", ddlNameStr);
+            if (!isValidDdlValue)
             {
                 string msg = "Cannot duplicate program.";
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);

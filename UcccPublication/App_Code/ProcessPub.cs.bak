@@ -1774,21 +1774,13 @@ public class ProcessPub
         string Initials = a.Initials;
         string initial;
         string firstName;
-
-        if (ForeName != null)
+        if (ForeName.IndexOf(' ') == -1)
         {
-            if (ForeName.IndexOf(' ') == -1)
-            {
-                firstName = ForeName;
-            }
-            else
-            {
-                firstName = ForeName.Substring(0, ForeName.IndexOf(' '));
-            }
+            firstName = ForeName;
         }
         else
         {
-            firstName = "";
+            firstName = ForeName.Substring(0, ForeName.IndexOf(' '));
         }
 
         if (Initials.Length == 2)

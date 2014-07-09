@@ -6,7 +6,7 @@
             <div class="fullblock" id="inventoryDiv" runat="server">
                 <div class="inventorycrumbs">
                 <font color="maroon" size="2" style="font-weight:bold">
-                    Member<br /><br />
+                    Program<br /><br />
                 </font>
     <table>
         <tr>
@@ -21,14 +21,15 @@
                 OnRowEditing="gvProgram_RowEditing" 
                 OnRowUpdating="gvProgram_RowUpdating" 
                 OnRowUpdated="gvProgram_RowUpdated"
+                OnRowDeleting="gvProgram_RowDeleting" 
                 OnRowCommand="gvProgram_RowCommand" 
                 ShowFooter="True" 
                 BackColor="White" BorderColor="#DEDFDE" 
                 BorderStyle="None" BorderWidth="1px" CellPadding="4" 
                 GridLines="Vertical" Font-Size="X-Small" ForeColor="Black"> 
                 <RowStyle BackColor="#F7F7DE" />
-            <Columns> 
-                <asp:TemplateField HeaderText="Member ID" Visible="false"  HeaderStyle-HorizontalAlign="Left" SortExpression="l_program_id"> 
+				<Columns>
+                <asp:TemplateField HeaderText="Program ID" Visible="false"  HeaderStyle-HorizontalAlign="Left" SortExpression="l_program_id"> 
                     <EditItemTemplate> 
                         <asp:Label ID="lblId" runat="server" Text='<%# Bind("l_program_id") %>'></asp:Label>
                     </EditItemTemplate> 
@@ -61,7 +62,34 @@
                     </ItemTemplate> 
                     <HeaderStyle HorizontalAlign="Left"></HeaderStyle>
                 </asp:TemplateField> 
-                <asp:TemplateField Visible="true" ControlStyle-Width="60px" FooterStyle-Width="60px" HeaderStyle-Width="60px" ItemStyle-Width="60px" HeaderText="Edit" ShowHeader="False" HeaderStyle-HorizontalAlign="Left"> 
+					<asp:TemplateField ItemStyle-Width="100px" HeaderText="Activated Date">
+						<ItemTemplate>
+							<asp:Label id="lblOrigActivatedDate" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.activated_date") %>'>
+							</asp:Label>
+						</ItemTemplate>
+						<EditItemTemplate>
+							<asp:TextBox id="txtActivatedDate" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.activated_date") %>'>
+							</asp:TextBox>
+						</EditItemTemplate>
+						<FooterTemplate>
+							<asp:TextBox ID="txtNewActivatedDate" Columns="5" Width="80px" Runat="Server" />
+						</FooterTemplate>
+					</asp:TemplateField>
+					<asp:TemplateField ItemStyle-Width="100px" HeaderText="Deactivated Date">
+						<ItemTemplate>
+							<asp:Label id="lblOrigDeactivatedDate" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.deactivated_date") %>'>
+							</asp:Label>
+						</ItemTemplate>
+						<EditItemTemplate>
+							<asp:TextBox id="txtDeactivatedDate" Width="80px" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.deactivated_date") %>'>
+							</asp:TextBox>
+						</EditItemTemplate>
+						<FooterTemplate>
+							<asp:TextBox ID="txtNewDeactivatedDate" Columns="5" Width="80px" Runat="Server" />
+						</FooterTemplate>
+					</asp:TemplateField>
+                <asp:TemplateField Visible="true" ControlStyle-Width="60px" FooterStyle-Width="60px" HeaderStyle-Width="60px" ItemStyle-Width="60px" HeaderText="Edit" 
+                    ShowHeader="False" HeaderStyle-HorizontalAlign="Left"> 
                     <EditItemTemplate> 
                         <asp:LinkButton ID="lbkUpdate" runat="server" CausesValidation="True" CommandName="Update" Text="Save"></asp:LinkButton> 
                         <asp:LinkButton ID="lnkCancel" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel"></asp:LinkButton> 
@@ -71,13 +99,20 @@
                     </FooterTemplate> 
                     <ItemTemplate> 
                         <asp:LinkButton ID="lnkEdit" runat="server" CausesValidation="False" CommandName="Edit" Text="Edit"></asp:LinkButton> 
+                        <asp:LinkButton ID="lnkDelete" runat="server" CausesValidation="False" 
+                            CommandName="Delete" 
+                            OnClientClick="return confirm('Are you sure you want to delete the program?');" 
+                            Text="Delete">
+                        </asp:LinkButton>
                     </ItemTemplate> 
                     <ControlStyle Width="60px"></ControlStyle>
                     <FooterStyle Width="60px"></FooterStyle>
                     <HeaderStyle HorizontalAlign="Left"></HeaderStyle>
                     <ItemStyle Width="60px"></ItemStyle>
                 </asp:TemplateField> 
-            </Columns> 
+
+				</Columns>
+
                 <FooterStyle BackColor="#CCCC99" />
                 <PagerStyle BackColor="#F7F7DE" ForeColor="Black" HorizontalAlign="Right" />
                 <SelectedRowStyle BackColor="#CE5D5A" Font-Bold="True" ForeColor="White" />

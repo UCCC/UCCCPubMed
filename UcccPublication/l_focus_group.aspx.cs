@@ -181,6 +181,9 @@ public partial class l_focus_group : System.Web.UI.Page
     {
         string idStr;
 
+        string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
+        SqlConnection myConnection = new SqlConnection(connectionStr);
+
         Label lblIdTemp = null;
         lblIdTemp = (Label)grdFocusGroup.Rows[e.RowIndex].FindControl("lblId");
         if (lblIdTemp != null)
@@ -192,26 +195,56 @@ public partial class l_focus_group : System.Web.UI.Page
             return;
         }
 
-        TextBox txtDescriptionTemp = null;
-        txtDescriptionTemp = (TextBox)grdFocusGroup.Rows[e.RowIndex].FindControl("txtDescription");
-        if (txtDescriptionTemp == null)
-        {
-            return;
-        }
-        TextBox txtGroupNumberTemp = null;
-        txtGroupNumberTemp = (TextBox)grdFocusGroup.Rows[e.RowIndex].FindControl("txtGroupNumber");
-        if (txtGroupNumberTemp == null)
-        {
-            return;
-        }
+        string oldProgramStr = GetOrigLabelValue("lblOrigProgram", idStr);
+        string newProgramStr = "";
+
         DropDownList ddlProgramTemp = null;
         ddlProgramTemp = (DropDownList)grdFocusGroup.Rows[e.RowIndex].FindControl("ddlProgram");
         if (ddlProgramTemp == null)
         {
             return;
         }
+        newProgramStr = ddlProgramTemp.SelectedItem.ToString();
 
-        string sqlStatement =
+        string oldGroupNumberStr = GetOrigLabelValue("lblOrigGroupNumber", idStr);
+        string newGroupNumberStr = "";
+
+        TextBox txtGroupNumberTemp = null;
+        txtGroupNumberTemp = (TextBox)grdFocusGroup.Rows[e.RowIndex].FindControl("txtGroupNumber");
+        if (txtGroupNumberTemp == null)
+        {
+            return;
+        }
+        newGroupNumberStr = txtGroupNumberTemp.Text;
+
+        TextBox txtDescriptionTemp = null;
+        txtDescriptionTemp = (TextBox)grdFocusGroup.Rows[e.RowIndex].FindControl("txtDescription");
+        if (txtDescriptionTemp == null)
+        {
+            return;
+        }
+        string sqlStatement = "";
+
+        sqlStatement =
+            "select count(*) from l_focus_group" +
+            " where l_program_id = " +
+            ddlProgramTemp.SelectedValue.ToString() +
+            " and group_number = " +
+            txtGroupNumberTemp.Text;
+
+        SqlCommand commandCnt2 = new SqlCommand(sqlStatement, myConnection);
+        myConnection.Open();
+        int existingCnt2 = (int)commandCnt2.ExecuteScalar();
+        myConnection.Close();
+
+        if (existingCnt2 > 0)
+        {
+            string msg = "There is an existing combination of program and focus group number.";
+            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+            return;
+        }
+
+        sqlStatement =
             "Update l_focus_group" +
             " SET description=@description," +
             " group_number=@group_number," +
@@ -221,8 +254,6 @@ public partial class l_focus_group : System.Web.UI.Page
         //idStr;
 
         //string connectionStr = ConfigurationManager.AppSettings.Get("ConnectionString");
-        string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
-        SqlConnection myConnection = new SqlConnection(connectionStr);
         SqlCommand command = new SqlCommand(sqlStatement, myConnection);
 
         SqlParameter descriptionParameter = new SqlParameter();
@@ -371,6 +402,12 @@ public partial class l_focus_group : System.Web.UI.Page
             {
                 return;
             }
+            if (descriptionStr == "" || GroupNumberStr == "" || ddlNewProgramTemp.SelectedIndex == -1 || ddlNewProgramTemp.SelectedIndex == 0)
+            {
+                string msg = "Please give program name/focus group name/group number.";
+                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+                return;
+            }
 
             sqlStatement =
                 "select count(*) from l_focus_group" +
@@ -386,6 +423,26 @@ public partial class l_focus_group : System.Web.UI.Page
             if (existingCnt > 0)
             {
                 string msg = "There is an existing focus group in focus group list. Please give another focus group name.";
+                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
+                txtNewDescriptionTemp.Text = "";
+                return;
+            }
+
+            sqlStatement =
+                "select count(*) from l_focus_group" +
+                " where l_program_id = " +
+                ddlNewProgramTemp.SelectedValue.ToString() +
+                " and group_number = " +
+                GroupNumberStr;
+
+            SqlCommand commandCnt2 = new SqlCommand(sqlStatement, myConnection);
+            myConnection.Open();
+            int existingCnt2 = (int)commandCnt2.ExecuteScalar();
+            myConnection.Close();
+
+            if (existingCnt2 > 0)
+            {
+                string msg = "There is an existing combination of program and focus group number.";
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
                 txtNewDescriptionTemp.Text = "";
                 return;
@@ -411,5 +468,33 @@ public partial class l_focus_group : System.Web.UI.Page
             FillFocusGroupGrid();
         }
 
+    }
+    protected string GetOrigLabelValue(string labelId, string idStr)
+    {
+        string itemTemp = "";
+        string junk = "";
+        for (int i = 0; i < grdFocusGroup.Rows.Count; i++)
+        {
+            Label lblProgramTemp = null;
+            lblProgramTemp = (Label)grdFocusGroup.Rows[i].Cells[1].FindControl(labelId);
+            if (lblProgramTemp != null)
+            {
+                itemTemp = lblProgramTemp.Text;
+            }
+
+            Label lblIdTemp = null;
+            string currIdStr = "";
+            lblIdTemp = (Label)grdFocusGroup.Rows[i].FindControl("lblId");
+            if (lblIdTemp != null)
+            {
+                currIdStr = lblIdTemp.Text;
+            }
+
+            if (currIdStr == idStr)
+            {
+                junk =  itemTemp;
+            }
+        }
+        return "";
     }
 }

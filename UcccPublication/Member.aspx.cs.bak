@@ -13,13 +13,13 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 
-public partial class l_institution : System.Web.UI.Page
+public partial class Member : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
         {
-            FillInstitutionGrid();
+            FillMemberGrid();
         }
     }
     /// ==========================================================================
@@ -97,7 +97,7 @@ public partial class l_institution : System.Web.UI.Page
             }
         }
     }
-    protected void gvInstitution_RowDataBound(object sender, GridViewRowEventArgs e)
+    protected void gvMember_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         if (e.Row.RowType == DataControlRowType.DataRow)
         {
@@ -117,17 +117,17 @@ public partial class l_institution : System.Web.UI.Page
             }
         }
     }
-    protected void gvInstitution_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+    protected void gvMember_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
     {
-        gvInstitution.EditIndex = -1;
-        FillInstitutionGrid();
+        gvMember.EditIndex = -1;
+        FillMemberGrid();
     }
-    protected void gvInstitution_RowUpdating(object sender, GridViewUpdateEventArgs e)
+    protected void gvMember_RowUpdating(object sender, GridViewUpdateEventArgs e)
     {
         string idStr;
 
         Label lblIdTemp = null;
-        lblIdTemp = (Label)gvInstitution.Rows[e.RowIndex].FindControl("lblId");
+        lblIdTemp = (Label)gvMember.Rows[e.RowIndex].FindControl("lblId");
         if (lblIdTemp != null)
         {
             idStr = lblIdTemp.Text;
@@ -137,31 +137,30 @@ public partial class l_institution : System.Web.UI.Page
             return;
         }
 
-        TextBox txtDescriptionTemp = null;
-        txtDescriptionTemp = (TextBox)gvInstitution.Rows[e.RowIndex].FindControl("txtDescription");
-        if (txtDescriptionTemp == null)
+        TextBox txtLastNameTemp = null;
+        txtLastNameTemp = (TextBox)gvMember.Rows[e.RowIndex].FindControl("txtLastName");
+        if (txtLastNameTemp == null)
         {
             return;
         }
-        TextBox txtAbbreviationTemp = null;
-        txtAbbreviationTemp = (TextBox)gvInstitution.Rows[e.RowIndex].FindControl("txtAbbreviation");
-        if (txtAbbreviationTemp == null)
+        TextBox txtFirstNameTemp = null;
+        txtFirstNameTemp = (TextBox)gvMember.Rows[e.RowIndex].FindControl("txtFirstName");
+        if (txtFirstNameTemp == null)
         {
             return;
         }
-        if (txtDescriptionTemp.Text == "" || txtAbbreviationTemp.Text == "")
+        TextBox txtMiTemp = null;
+        txtMiTemp = (TextBox)gvMember.Rows[e.RowIndex].FindControl("txtMi");
+        if (txtMiTemp == null)
         {
-            string msg = "Please give institution name and abbreviation.";
-            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
             return;
         }
-
         string sqlStatement =
-            "Update l_institution" +
-            " SET " +
-            " abbreviation=@abbreviation," +
-            " description=@description" +
-            " WHERE (l_institution_id = @l_institution_id)";
+            "Update client" +
+            " SET last_name=@last_name," +
+            " first_name=@first_name," +
+            " mi=@mi" +
+            " WHERE (client_id = @client_id)";
 
         //idStr;
 
@@ -170,45 +169,58 @@ public partial class l_institution : System.Web.UI.Page
         SqlConnection myConnection = new SqlConnection(connectionStr);
         SqlCommand command = new SqlCommand(sqlStatement, myConnection);
 
-        SqlParameter descriptionParameter = new SqlParameter();
-        descriptionParameter.ParameterName = "@description";
-        descriptionParameter.SqlDbType = SqlDbType.VarChar;
-        if (txtDescriptionTemp.Text != "")
+        SqlParameter last_nameParameter = new SqlParameter();
+        last_nameParameter.ParameterName = "@last_name";
+        last_nameParameter.SqlDbType = SqlDbType.VarChar;
+        if (txtLastNameTemp.Text != "")
         {
-            descriptionParameter.Value = txtDescriptionTemp.Text;
+            last_nameParameter.Value = txtLastNameTemp.Text;
         }
         else
         {
-            descriptionParameter.Value = DBNull.Value;
+            last_nameParameter.Value = DBNull.Value;
         }
-        command.Parameters.Add(descriptionParameter);
+        command.Parameters.Add(last_nameParameter);
 
-        SqlParameter abbreviationParameter = new SqlParameter();
-        abbreviationParameter.ParameterName = "@abbreviation";
-        abbreviationParameter.SqlDbType = SqlDbType.VarChar;
-        if (txtAbbreviationTemp.Text != "")
+        SqlParameter first_nameParameter = new SqlParameter();
+        first_nameParameter.ParameterName = "@first_name";
+        first_nameParameter.SqlDbType = SqlDbType.VarChar;
+        if (txtFirstNameTemp.Text != "")
         {
-            abbreviationParameter.Value = txtAbbreviationTemp.Text;
+            first_nameParameter.Value = txtFirstNameTemp.Text;
         }
         else
         {
-            abbreviationParameter.Value = DBNull.Value;
+            first_nameParameter.Value = DBNull.Value;
         }
-        command.Parameters.Add(abbreviationParameter);
+        command.Parameters.Add(first_nameParameter);
 
-        SqlParameter l_institution_idParameter = new SqlParameter();
-        l_institution_idParameter.ParameterName = "@l_institution_id";
-        l_institution_idParameter.SqlDbType = SqlDbType.Int;
-        l_institution_idParameter.Value = System.Convert.ToInt32(lblIdTemp.Text);
-        command.Parameters.Add(l_institution_idParameter);
+        SqlParameter miParameter = new SqlParameter();
+        miParameter.ParameterName = "@mi";
+        miParameter.SqlDbType = SqlDbType.VarChar;
+        if (txtMiTemp.Text != "")
+        {
+            miParameter.Value = txtMiTemp.Text;
+        }
+        else
+        {
+            miParameter.Value = DBNull.Value;
+        }
+        command.Parameters.Add(miParameter);
+
+        SqlParameter client_idParameter = new SqlParameter();
+        client_idParameter.ParameterName = "@client_id";
+        client_idParameter.SqlDbType = SqlDbType.Int;
+        client_idParameter.Value = System.Convert.ToInt32(lblIdTemp.Text);
+        command.Parameters.Add(client_idParameter);
 
         myConnection.Open();
         command.ExecuteNonQuery();
         myConnection.Close();
 
-        gvInstitution.EditIndex = -1;
+        gvMember.EditIndex = -1;
 
-        FillInstitutionGrid();
+        FillMemberGrid();
 
         if (e.RowIndex > 0)
         {
@@ -223,7 +235,7 @@ public partial class l_institution : System.Web.UI.Page
         }
 
     }
-    protected void gvInstitution_RowUpdated(Object sender, GridViewUpdatedEventArgs e)
+    protected void gvMember_RowUpdated(Object sender, GridViewUpdatedEventArgs e)
     {
         String tempStr = "";
 
@@ -246,31 +258,45 @@ public partial class l_institution : System.Web.UI.Page
         }
 
     }
-    protected void gvInstitution_RowEditing(object sender, GridViewEditEventArgs e)
+    protected void gvMember_RowEditing(object sender, GridViewEditEventArgs e)
     {
-        gvInstitution.EditIndex = e.NewEditIndex;
-        FillInstitutionGrid();
+        gvMember.EditIndex = e.NewEditIndex;
+        FillMemberGrid();
     }
-    public void FillInstitutionGrid()
+    public void FillMemberGrid()
     {
         //string connectionStr = ConfigurationManager.AppSettings.Get("ConnectionString");
         string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
         string sqlStatement =
-            "select l_institution_id," +
-            " description," +
-            " abbreviation" +
-            " from l_institution" +
-            " where abbreviation is not null and abbreviation <>''" +
-            " order by description";
+            "select client_id," +
+            " last_name," +
+            " first_name," +
+            " mi" +
+            " from client" +
+            " where last_name is not null and last_name <> ''" +
+            " order by last_name";
 
-        SqlDataSource dsInstitution = new SqlDataSource(connectionStr, sqlStatement);
-        //Cache["FISHALKDATASOURCE"] = dsInstitution;
-        gvInstitution.DataSource = dsInstitution;
-        gvInstitution.DataBind();
-
-        EmptyGridFix(gvInstitution);
+        SqlDataSource dsMember = new SqlDataSource(connectionStr, sqlStatement);
+        //Cache["FISHALKDATASOURCE"] = dsMember;
+        gvMember.DataSource = dsMember;
+        gvMember.DataBind();
+        /*
+        DataView dv = (DataView)dsMember.Select(DataSourceSelectArguments.Empty);
+        if (dv.Count == 0)
+        {
+            //btnAddImage.Visible = true;
+            //txtNewDescription.Visible = true;
+            gvMember.EditIndex = dv.Count - 1;
+        }
+        else
+        {
+            //btnAddImage.Visible = false;
+            //txtNewDescription.Visible = false;
+        }
+         * */
+        //EmptyGridFix(gvMember);
     }
-    protected void gvInstitution_RowCommand(object sender, GridViewCommandEventArgs e)
+    protected void gvMember_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         //ErrorMessage.Text = "";
         if (e.CommandName.Equals("Insert"))
@@ -281,24 +307,23 @@ public partial class l_institution : System.Web.UI.Page
 
             string sqlStatement = "";
 
-            TextBox txtNewDescriptionTemp = (TextBox)gvInstitution.FooterRow.FindControl("txtNewDescription");
-            string descriptionStr = txtNewDescriptionTemp.Text;
-            TextBox txtNewAbbreviationTemp = (TextBox)gvInstitution.FooterRow.FindControl("txtNewAbbreviation");
-            string abbreviationStr = txtNewAbbreviationTemp.Text;
-
-            if (descriptionStr == "" || abbreviationStr == "")
-            {
-                string msg = "Please give institution name and abbreviation.";
-                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
-                return;
-            }
+            TextBox txtNewLastNameTemp = (TextBox)gvMember.FooterRow.FindControl("txtNewLastName");
+            string last_nameStr = txtNewLastNameTemp.Text;
+            TextBox txtNewFirstNameTemp = (TextBox)gvMember.FooterRow.FindControl("txtNewFirstName");
+            string first_nameStr = txtNewFirstNameTemp.Text;
+            TextBox txtNewMiTemp = (TextBox)gvMember.FooterRow.FindControl("txtNewMi");
+            string miStr = txtNewMiTemp.Text;
 
             sqlStatement =
-                "select count(*) from l_institution" +
-                " where description = '" +
-                descriptionStr +
+                "select count(*) from client" +
+                " where last_name = '" +
+                last_nameStr +
+                "' and first_name = '" +
+                first_nameStr +
+                "' and mi = '" +
+                miStr +
                 "'";
-
+                
 
             SqlCommand commandCnt = new SqlCommand(sqlStatement, myConnection);
             myConnection.Open();
@@ -307,45 +332,57 @@ public partial class l_institution : System.Web.UI.Page
 
             if (existingCnt > 0)
             {
-                string msg = "There is an existing institution in institution list. Please give another institution name.";
+                string msg = "There is an existing member in member list. Please give another member name.";
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + msg + "');", true);
-                txtNewDescriptionTemp.Text = "";
-                txtNewAbbreviationTemp.Text = "";
+                txtNewLastNameTemp.Text = "";
                 return;
             }
 
             sqlStatement =
-                " insert into l_institution" +
-                " (description, abbreviation) values " +
-                "(@description,@abbreviation)";
+                " insert into client" +
+                " (last_name, first_name, mi) values " +
+                "(@last_name, @first_name, @mi)";
 
 
             SqlCommand command = new SqlCommand(sqlStatement, myConnection);
 
-            SqlParameter descriptionParameter = new SqlParameter();
-            descriptionParameter.ParameterName = "@description";
-            descriptionParameter.SqlDbType = SqlDbType.VarChar;
-            descriptionParameter.Value = descriptionStr;
-            command.Parameters.Add(descriptionParameter);
+            SqlParameter last_nameParameter = new SqlParameter();
+            last_nameParameter.ParameterName = "@last_name";
+            last_nameParameter.SqlDbType = SqlDbType.VarChar;
+            last_nameParameter.Value = last_nameStr;
+            command.Parameters.Add(last_nameParameter);
 
-            SqlParameter abbreviationParameter = new SqlParameter();
-            abbreviationParameter.ParameterName = "@abbreviation";
-            abbreviationParameter.SqlDbType = SqlDbType.VarChar;
-            abbreviationParameter.Value = abbreviationStr;
-            command.Parameters.Add(abbreviationParameter);
+            SqlParameter first_nameParameter = new SqlParameter();
+            first_nameParameter.ParameterName = "@first_name";
+            first_nameParameter.SqlDbType = SqlDbType.VarChar;
+            first_nameParameter.Value = first_nameStr;
+            command.Parameters.Add(first_nameParameter);
 
-            SqlParameter l_institution_idParameter = new SqlParameter();
-            l_institution_idParameter.ParameterName = "@l_institution_id";
-            l_institution_idParameter.SqlDbType = SqlDbType.Int;
-            l_institution_idParameter.Direction = ParameterDirection.Output;
-            command.Parameters.Add(l_institution_idParameter);
+            SqlParameter MIParameter = new SqlParameter();
+            MIParameter.ParameterName = "@mi";
+            MIParameter.SqlDbType = SqlDbType.VarChar;
+            if (miStr != "")
+            {
+                MIParameter.Value = miStr;
+            }
+            else
+            {
+                MIParameter.Value = DBNull.Value;
+            }
+            command.Parameters.Add(MIParameter);
+
+            SqlParameter client_idParameter = new SqlParameter();
+            client_idParameter.ParameterName = "@client_id";
+            client_idParameter.SqlDbType = SqlDbType.Int;
+            client_idParameter.Direction = ParameterDirection.Output;
+            command.Parameters.Add(client_idParameter);
 
             myConnection.Open();
             command.ExecuteNonQuery();
             myConnection.Close();
 
-            gvInstitution.EditIndex = -1;
-            FillInstitutionGrid();
+            gvMember.EditIndex = -1;
+            FillMemberGrid();
         }
 
     }
