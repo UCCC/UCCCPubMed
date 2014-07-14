@@ -74,6 +74,16 @@ public partial class RetrievePub : System.Web.UI.Page
             btnGetPubAll.Attributes.Add("onclick", "hourglass();");
             btnGetPubByProgram.Attributes.Add("onclick", "hourglass();");
             btnGetPubByMember.Attributes.Add("onclick", "hourglass();");
+            btnGetPubByStartLetter.Attributes.Add("onclick", "hourglass();");
+
+            btnImportArticleEDate.Attributes.Add("onclick", "hourglass();");
+            btnImportBySpecifiedName.Attributes.Add("onclick", "hourglass();");
+            btnImportCollectiveName.Attributes.Add("onclick", "hourglass();");
+            btnImportEntrezDate.Attributes.Add("onclick", "hourglass();");
+            btnReImportTitle.Attributes.Add("onclick", "hourglass();");
+            btnSearchOnTitle.Attributes.Add("onclick", "hourglass();");
+            btnSearchPmid.Attributes.Add("onclick", "hourglass();");
+            btnSpecialImport.Attributes.Add("onclick", "hourglass();");
 
         }
     }
