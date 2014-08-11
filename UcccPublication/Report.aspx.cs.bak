@@ -1043,6 +1043,7 @@ public partial class Report : System.Web.UI.Page
         lblSelectedPublications.Font.Bold = true;
         tcTopTable1_r1_c2.Controls.Add(lblSelectedPublications);
 
+        ListBox memberList = (ListBox)Session["MEMBERLIST"];
         List<String> lstitems = new List<String>();
         string current_member = (string)Session["CurrentClient"];
         lstitems.Add(current_member);

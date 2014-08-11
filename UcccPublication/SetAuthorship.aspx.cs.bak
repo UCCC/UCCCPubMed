@@ -347,7 +347,6 @@ public partial class SetAuthorship : System.Web.UI.Page
         if (ddlMember.SelectedIndex != 0 && ddlMember.SelectedIndex != -1)
         {
             clientIdStr = ddlMember.SelectedValue.ToString();
-            Session["CurrentClient"] = clientIdStr;
         }
         else
         {

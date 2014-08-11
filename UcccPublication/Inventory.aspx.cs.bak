@@ -356,8 +356,6 @@ public partial class Inventory : System.Web.UI.Page
                 " on pd.publication_id = pa.publication_id" +
                 " inner join author a" +
                 " on pa.author_id = a.author_id" +
-                " inner join publication_program pp" +
-                " on p.publication_id = pp.publication_id" +
                 " and a.client_id = " +
                 clientIdStr +
                 " where ((pd.publication_date >= '" +

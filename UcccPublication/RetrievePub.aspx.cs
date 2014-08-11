@@ -1103,6 +1103,7 @@ public partial class RetrievePub : System.Web.UI.Page
             return publicationId;
         }
         InsertPublicationAuthors(publicationId, authorList);
+
         InsertPublicationPubtypes(publicationId, pubtypeList);
         int importedPubs = Convert.ToInt32(hdnPubCnt.Value);
         importedPubs++;
@@ -1804,7 +1805,6 @@ public partial class RetrievePub : System.Web.UI.Page
                 publication_idParameter.SqlDbType = SqlDbType.Int;
                 publication_idParameter.Direction = ParameterDirection.Output;
                 myCommand.Parameters.Add(publication_idParameter);
-                publicationId = (int)publication_idParameter.Value;
             }
             catch (Exception ex)
             {
