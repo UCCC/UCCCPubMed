@@ -1815,6 +1815,7 @@ public partial class RetrievePub : System.Web.UI.Page
 
             myConnection.Open();
             myCommand.ExecuteNonQuery();
+            publicationId = (int)myCommand.Parameters["@publication_id"].Value;
         }
         catch (Exception ex)
         {
@@ -2174,6 +2175,7 @@ public partial class RetrievePub : System.Web.UI.Page
         string connectionStr = ConfigurationManager.ConnectionStrings["UcccPubMedDB"].ConnectionString;
         SqlConnection myConnection = new SqlConnection(connectionStr);
         string sqlStatement;
+        string tmpMessage = "";
 
         foreach (author ar in authorList) // Loop through List with foreach
         {
